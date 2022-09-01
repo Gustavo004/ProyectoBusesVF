@@ -1,0 +1,45 @@
+﻿@using ProyectoBuses.Models
+@model List<SucursalCLS>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@Html.ActionLink("Agregar", "Agregar", "Sucursal", null, new { @class = "btn btn-primary" })
+
+<table class="table table-striped">
+
+    <thead>
+
+        <tr>
+            <td>@Html.LabelFor(p => Model[0].idsucursal)</td>
+            <td>@Html.LabelFor(p => Model[0].nombre)</td>
+            <td>@Html.LabelFor(p => Model[0].direccion)</td>
+            <td>@Html.LabelFor(p => Model[0].telefono)</td>
+            <td>@Html.LabelFor(p => Model[0].email)</td>
+            <td>@Html.LabelFor(p => Model[0].fechaApertura)</td>
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.idsucursal</td>
+                <td>@item.nombre</td>
+                <td>@item.direccion</td>
+                <td>@item.telefono</td>
+                <td>@item.email</td>
+                <td>@item.fechaApertura</td>
+            </tr>
+        }
+
+    </tbody>
+
+
+</table>
+

@@ -1,0 +1,41 @@
+﻿@using ProyectoBuses.Models
+@model MarcaCLS
+
+@{
+    ViewBag.Title = "Agregar";
+}
+
+<h2>Agregar</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("Agregar", "Marca", FormMethod.Post))
+        {
+
+            <div>
+                @Html.LabelFor(p => p.nombre)
+                @Html.TextBoxFor(p => p.nombre, new { @class = "form-control" })
+                @Html.ValidationMessage("nombre", new {@class="text-danger"})
+            </div>
+
+            <div>
+                @Html.LabelFor(p => p.descripcion)             
+                @Html.TextAreaFor(model => model.descripcion, new { @class = "form-control", @cols = 40, @rows = 10 })
+                @Html.ValidationMessage("descripcion", new { @class = "text-danger" })
+            </div>
+
+            <br />
+
+            <div style="margin:auto">
+
+                <input  type="submit" class="btn btn-success" value="Guardar"/>
+
+            </div>
+
+
+
+
+
+        }
+    </div>
+</div>   

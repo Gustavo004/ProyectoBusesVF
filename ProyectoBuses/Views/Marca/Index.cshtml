@@ -1,0 +1,37 @@
+﻿@using ProyectoBuses.Models
+@model List<MarcaCLS>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<h2>Index</h2>
+@Html.ActionLink("Agregar","Agregar","Marca",null,new {@class="btn btn-primary"})
+
+<table class="table table-striped">
+    <thead>
+
+        <tr>
+            <td width="10%">@Html.LabelFor(p=>Model[0].iddmarca)</td>
+            <td width="20%">@Html.LabelFor(p => Model[0].nombre)</td>
+            <td width="70%">@Html.LabelFor(p => Model[0].descripcion)</td>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.iddmarca</td>
+                <td>@item.nombre</td>
+                <td>@item.descripcion</td>
+            </tr>
+        }
+
+    </tbody>
+
+
+</table>

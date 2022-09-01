@@ -1,0 +1,46 @@
+﻿@using ProyectoBuses.Models
+@model List<EmpleadoCLS>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.ActionLink("Agregar", "Agregar", "Empleado", null, new { @class = "btn btn-primary" })
+
+
+<table class="table table-hover table table-striped">
+
+    <thead>
+
+        <tr>
+            <td>@Html.LabelFor(p => Model[0].idempleado)</td>
+            <td>@Html.LabelFor(p => Model[0].nombre)</td>
+            <td>@Html.LabelFor(p => Model[0].apPaterno)</td>
+            <td>@Html.LabelFor(p => Model[0].apMaterno)</td>
+            <td>@Html.LabelFor(p => Model[0].nombreTipoUsuario)</td>
+            <td>@Html.LabelFor(p => Model[0].nombreTipocontrato)</td>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.idempleado</td>
+                <td>@item.nombre</td>
+                <td>@item.apPaterno</td>
+                <td>@item.apMaterno</td>
+                <td>@item.nombreTipoUsuario</td>
+                <td>@item.nombreTipocontrato</td>
+            </tr>
+
+        }
+
+    </tbody>
+
+
+</table>
