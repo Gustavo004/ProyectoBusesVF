@@ -72,5 +72,35 @@ namespace ProyectoBuses.Controllers
             }
             return RedirectToAction("Index");
         }
+
+
+
+        //Vista para el action Result
+        public ActionResult Editar(int id)
+        {
+            //Creando la clase OmarcaCLS
+            SucursalCLS OsucursalCLS = new SucursalCLS();
+
+            //Abriendo la conexion con la base de datos;
+            using (var bd = new BDPasajeEntities1())
+            {
+                //Recuperando el objeto y trayendo solo la primera fila es por ello que usamos el metodo.first();
+                Sucursal OSucursal = bd.Sucursal.Where(p => p.IIDSUCURSAL.Equals(id)).First();
+
+                //Recuperando los parametros para pasarlo al  modelo
+                OsucursalCLS.idsucursal = OSucursal.IIDSUCURSAL;
+                OsucursalCLS.nombre = OSucursal.NOMBRE;
+                OsucursalCLS.direccion = OSucursal.DIRECCION;
+                OsucursalCLS.telefono = OSucursal.TELEFONO;
+                OsucursalCLS.email = OSucursal.EMAIL;
+                OsucursalCLS.fechaApertura = (DateTime)OSucursal.FECHAAPERTURA;
+
+            }
+            //Del modelo lo mandamos a la vista del programador
+            return View(OsucursalCLS);
+        }
+
+
+
     }
 }

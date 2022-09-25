@@ -1,0 +1,65 @@
+﻿@using ProyectoBuses.Models
+@model MarcaCLS
+
+@{
+    ViewBag.Title = "Editar";
+}
+
+<h2>Editar</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("Editar", "Marca", FormMethod.Post , new { @id="frmEditar"} ))
+        {
+
+            <div>
+                @Html.LabelFor(p => p.iddmarca)
+                @Html.TextBoxFor(p => p.iddmarca, new { @class = "form-control", @readOnly=true})
+                @Html.ValidationMessage("iddmarca", new { @class = "text-danger" })
+            </div>
+
+
+            <div>
+                @Html.LabelFor(p => p.nombre)
+                @Html.TextBoxFor(p => p.nombre, new { @class = "form-control" })
+                @Html.ValidationMessage("nombre", new { @class = "text-danger" })
+            </div>
+
+            <div>
+                @Html.LabelFor(p => p.descripcion)
+                @Html.TextAreaFor(model => model.descripcion, new { @class = "form-control", @cols = 40, @rows = 10 })
+                @Html.ValidationMessage("descripcion", new { @class = "text-danger" })
+            </div>
+
+            <br />
+
+            <div style="margin:auto">
+
+                <input type="submit" class="btn btn-success" value="Actualizar" />
+                @Html.ActionLink("Regresar", "Index", "Marca", null, new { @class = "btn btn-danger" })
+
+            </div>
+
+
+        }
+    </div>
+</div>  
+
+<!--VALIDACION EN JS-->
+<script>
+
+    var frmEditar = document.getElementById("frmEditar");
+    frmEditar.onsubmit = function (e)
+    {
+        e.preventDefault();
+
+        if (confirm("¿Deseas guardar los cambios ?") == 1)
+        {
+            frmEditar.submit();
+
+        }
+
+    }
+
+ 
+</script>

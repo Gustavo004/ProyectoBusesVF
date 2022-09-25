@@ -101,9 +101,38 @@ namespace ProyectoBuses.Controllers
         }
 
 
+        //Vista para el action Result
+        public ActionResult Editar(int id)
+        {
+            //Creando la clase OmarcaCLS
+            ClienteCLS OclienteCLS = new ClienteCLS();
+
+            //Abriendo la conexion con la base de datos;
+            using (var bd = new BDPasajeEntities1())
+            {
+                //Recuperando el objeto y trayendo solo la primera fila es por ello que usamos el metodo.first();
+                Cliente OCliente = bd.Cliente.Where(p => p.IIDCLIENTE.Equals(id)).First();
+
+                //Recuperando los parametros para pasarlo al  modelo
+                OclienteCLS.idcliente = OCliente.IIDCLIENTE;
+                OclienteCLS.nombre = OCliente.NOMBRE;
+                OclienteCLS.appaterno = OCliente.APPATERNO;
+                OclienteCLS.apmaterno = OCliente.APMATERNO;
+                OclienteCLS.email = OCliente.EMAIL;
+                OclienteCLS.direccion = OCliente.DIRECCION;
+                OclienteCLS.idsexo = (int)OCliente.IIDSEXO;
+                OclienteCLS.telefonoFijo = OCliente.TELEFONOFIJO;
+                OclienteCLS.telefonoCelular = OCliente.TELEFONOCELULAR;
+
+                //Recuperando el combo
+                LlenarSexo();
+                ViewBag.lista = listaSexo;
 
 
-
+            }
+            //Del modelo lo mandamos a la vista del programador
+            return View(OclienteCLS);
+        }
 
 
 

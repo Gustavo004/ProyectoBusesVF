@@ -9,17 +9,17 @@
 
 <div class="row">
     <div class="col-md-6">
-        @using (Html.BeginForm("Agregar", "Marca", FormMethod.Post))
+        @using (Html.BeginForm("Agregar", "Marca", FormMethod.Post,new {@id="frmAgregarMarca"}))
         {
 
             <div>
                 @Html.LabelFor(p => p.nombre)
                 @Html.TextBoxFor(p => p.nombre, new { @class = "form-control" })
-                @Html.ValidationMessage("nombre", new {@class="text-danger"})
+                @Html.ValidationMessage("nombre", new { @class = "text-danger" })
             </div>
 
             <div>
-                @Html.LabelFor(p => p.descripcion)             
+                @Html.LabelFor(p => p.descripcion)
                 @Html.TextAreaFor(model => model.descripcion, new { @class = "form-control", @cols = 40, @rows = 10 })
                 @Html.ValidationMessage("descripcion", new { @class = "text-danger" })
             </div>
@@ -28,7 +28,7 @@
 
             <div style="margin:auto">
 
-                <input  type="submit" class="btn btn-success" value="Guardar"/>
+                <input type="submit" class="btn btn-success" value="Guardar" />
 
             </div>
 
@@ -38,4 +38,25 @@
 
         }
     </div>
-</div>   
+</div>
+
+<!--VALIDACION EN JS-->
+<script>
+
+    var frmAgregarMarca = document.getElementById("frmAgregarMarca");
+    frmAgregarMarca.onsubmit = function (e)
+    {
+        e.preventDefault();
+
+        if (confirm("¿Deseas guardar los cambios ?") == 1)
+        {
+            frmAgregarMarca.submit();
+
+        }
+
+    }
+</script>
+
+
+
+

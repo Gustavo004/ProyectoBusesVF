@@ -26,10 +26,10 @@ namespace ProyectoBuses.Models
         [StringLength(100, ErrorMessage = "Máximo 100 caracteres")]
         public string placa { get; set; }
 
-
+        //Para que nos permita registrar;
         [Display(Name = "Fecha De Compra")]
         [Required]
-        //Para que nos permita registrar;
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime fechaCompra { get; set; }
 
@@ -54,12 +54,14 @@ namespace ProyectoBuses.Models
 
 
         [Display(Name = "Descripción")]
+        [DataType(DataType.MultilineText)]
         [Required]
         [StringLength(200, ErrorMessage = "Máximo 200 caracteres")]
         public string descripcion { get; set; }
 
 
         [Display(Name = "Observación")]
+        [DataType(DataType.MultilineText)]
         [StringLength(200,ErrorMessage ="Máximo 200 caracteres")]
         public string observacion { get; set; }
 

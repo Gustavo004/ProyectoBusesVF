@@ -38,6 +38,7 @@ namespace ProyectoBuses.Models
 
 
         [Display(Name = "Dirección")]
+        [DataType(DataType.MultilineText)]
         [Required]
         [StringLength(200, ErrorMessage = "Longitud Máxima 200")]
         public string direccion { get; set; }
