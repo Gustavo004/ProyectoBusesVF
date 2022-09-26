@@ -162,10 +162,7 @@ namespace ProyectoBuses.Controllers
             if (!ModelState.IsValid)
             {
                 ListarCombos();
-                ViewBag.lista = listaSucursal;
-                ViewBag.lista = listaModelo;
-                ViewBag.lista = listaMarca;
-                ViewBag.listaTipoBus = listaSucursal;
+
 
                 return View(oBusCLS);
             }
@@ -201,12 +198,6 @@ namespace ProyectoBuses.Controllers
         {
             //Recuperando el combo
             ListarCombos();
-
-            //ViewBags;
-            ViewBag.lista = listaSucursal;
-            ViewBag.lista = listaModelo;
-            ViewBag.lista = listaMarca;
-            ViewBag.listaTipoBus = listaSucursal;
 
             //Creando la clase BusCLS
             BusCLS oBusCLS = new BusCLS();
