@@ -4,17 +4,29 @@
 
 @{
     ViewBag.Title = "Agregar";
-    List<SelectListItem> listaSexo =(List<SelectListItem>)ViewBag.lista;
+    List<SelectListItem> listaSexo = (List<SelectListItem>)ViewBag.lista;
 }
 
+
 <h2>Agregar</h2>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- <script src="~/Scripts/jquery-3.4.1.min.js"></script>-->
+
+
 
 <div class="row">
 
 
     <div class="col-md-6">
 
-        @using (Html.BeginForm("Agregar", "Cliente", FormMethod.Post))
+        @using (Html.BeginForm("Agregar", "Cliente", FormMethod.Post, new { @id = "frmAgregarCliente" }))
         {
 
             <div>
@@ -49,7 +61,7 @@
 
             <div>
                 @Html.LabelFor(p => p.idsexo)
-                @Html.DropDownList("idsexo", listaSexo,null,new {@class="form-control"})
+                @Html.DropDownList("idsexo", listaSexo, null, new { @class = "form-control" })
                 @Html.ValidationMessage("idsexo", new { @class = "text-danger" })
             </div>
 
@@ -68,10 +80,60 @@
             <br />
 
             <div style="margin:auto">
-                <input type="submit" value="Guardar" class="btn btn-success" />
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                    Guardar
+                </button>
+
+                @Html.ActionLink("Regresar", "Index", "Cliente", null, new { @class = "btn btn-danger" })
+
             </div>
 
 
         }
     </div>
 </div>
+
+<!--VALIDACION EN JS-->
+<script>
+
+    var frmAgregarCliente = document.getElementById("frmAgregarCliente");
+    frmAgregarCliente.onsubmit = function (e) {
+        e.preventDefault();
+
+        if (confirm("¿Deseas guardar los cambios ?") == 1) {
+            frmAgregarCliente.submit();
+
+        }
+
+    }
+</script>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea guardar los cambios?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:1em">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="Agregar()" class="btn btn-success">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function Agregar()
+    {
+        var frmCliente = document.getElementById("frmAgregarCliente");
+        frmCliente.submit();
+    }
+</script>

@@ -13,10 +13,9 @@ namespace ProyectoBuses.Controllers
         public ActionResult Index()
         {
 
+            //Listado de usarios  Desde la base de datos ;
 
             List<EmpleadoCLS> listaEmpleados = null;
-
-
             using (var bd = new BDPasajeEntities1() ) 
             {
 
@@ -34,23 +33,23 @@ namespace ProyectoBuses.Controllers
                                       apMaterno = empleado.APMATERNO,
                                       nombreTipoUsuario = tipousuario.NOMBRE,
                                       nombreTipocontrato = tipocontrato.NOMBRE
-                                  }).ToList(); 
-                               
-
+                                  }).ToList();                           
             }
-
             return View(listaEmpleados);
         }
 
-        //Listando los sexos por valor;
+
+
+        //Creando una lista para lista el Sexo;
+        List<SelectListItem> listaSexo = null;
         public void listarComboSexo() 
         {
             //Agregar;
-            List<SelectListItem> lista = null;
-
+           
+            //Abriendo una conexion a la db
             using (var bd = new BDPasajeEntities1() ) 
             {
-                lista = (from sexo in bd.Sexo
+                listaSexo = (from sexo in bd.Sexo
                          where sexo.BHABILITADO == 1
                          select new SelectListItem
                          {
@@ -58,19 +57,25 @@ namespace ProyectoBuses.Controllers
                              Value = sexo.IIDSEXO.ToString()
 
                          }).ToList();
-                lista.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
-                ViewBag.listaSexo = lista;
+                listaSexo.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
+
+              //Esto lo almaceno en un ViewBag para posterior pasarlo a la vista agregar desde aqui se recupera para la vista;
+              ViewBag.listaSexo = listaSexo;
             }
         }
 
 
+
+
+
         //Listando tipoUsuario
+        List<SelectListItem> listaTipoUsuario = null;
         public void listaTipoUsuarios() 
         {
-            List<SelectListItem> lista = null;
+           
             using (var bd = new BDPasajeEntities1() ) 
             {
-                lista = (from tipousuario in bd.TipoUsuario
+                listaTipoUsuario = (from tipousuario in bd.TipoUsuario
                          where tipousuario.BHABILITADO == 1
                          select new SelectListItem
                          {
@@ -78,18 +83,22 @@ namespace ProyectoBuses.Controllers
                              Value = tipousuario.IIDTIPOUSUARIO.ToString()
 
                          }).ToList();
-                lista.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
-                ViewBag.listaTipoUsuarios = lista;
+                listaTipoUsuario.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
+                ViewBag.listaTipoUsuarios = listaTipoUsuario;
             }     
         }
 
+
+
+
         //Listando tipoContrato
+       List<SelectListItem> listaTipoContratos = null;
         public void listaTipoContrato()
         {
-            List<SelectListItem> lista = null;
+            
             using (var bd = new BDPasajeEntities1() )
             {
-                lista = (from tipocontrato in bd.TipoContrato
+                listaTipoContratos = (from tipocontrato in bd.TipoContrato
                          where tipocontrato.BHABILITADO == 1
                          select new SelectListItem
                          {
@@ -97,8 +106,8 @@ namespace ProyectoBuses.Controllers
                              Value = tipocontrato.IIDTIPOCONTRATO.ToString()
                          }).ToList();
 
-                lista.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
-                ViewBag.listaTipoContrato = lista;
+                listaTipoContratos.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
+                ViewBag.listaTipoContrato = listaTipoContratos;
             }
         }
 
@@ -109,13 +118,10 @@ namespace ProyectoBuses.Controllers
             listaTipoUsuarios();
             listaTipoContrato();
             listarComboSexo();
+            
         }
    
        
-
-
-
-
 
 
         //vista para agregar empleado;
@@ -123,9 +129,14 @@ namespace ProyectoBuses.Controllers
         {
 
             listarCombos();
+
+            //Se invoca a los ViewBags;
+            ViewBag.lista = listaTipoUsuario;
+            ViewBag.lista = listaTipoContratos;
+            ViewBag.lista = listaSexo;
+
             return View();
         }
-
 
 
 
@@ -137,6 +148,11 @@ namespace ProyectoBuses.Controllers
             if (!ModelState.IsValid)
             {
                 listarCombos();
+
+                ViewBag.lista = listaTipoUsuario;
+                ViewBag.lista = listaTipoContratos;
+                ViewBag.lista = listaSexo;
+
                 return View(oEmpleadoCLS);
             }
             else 
@@ -162,5 +178,74 @@ namespace ProyectoBuses.Controllers
                return RedirectToAction("Index");
             }         
         }
+
+        //Vista para el action Result
+        public ActionResult Editar(int id) 
+        {
+            //Creando la clase OmarcaCLS
+            EmpleadoCLS oEmpleadoCLS = new EmpleadoCLS();
+            //Abriendo la conexion con la base de datos;
+            using (var bd = new BDPasajeEntities1())
+            {
+                //Recuperando el objeto y trayendo solo la primera fila es por ello que usamos el metodo.first();
+                Empleado OEmpleado = bd.Empleado.Where(p => p.IIDEMPLEADO.Equals(id)).First();
+
+                //Recuperando los parametros para pasarlo al  modelo
+                oEmpleadoCLS.idempleado = OEmpleado.IIDEMPLEADO;
+                oEmpleadoCLS.nombre = OEmpleado.NOMBRE;
+                oEmpleadoCLS.apPaterno = OEmpleado.APPATERNO;
+                oEmpleadoCLS.apMaterno = OEmpleado.APMATERNO;
+                oEmpleadoCLS.fechaContrato = (DateTime)OEmpleado.FECHACONTRATO;
+                oEmpleadoCLS.sueldo = (decimal)OEmpleado.SUELDO;
+
+                //Listas desplegables;
+                oEmpleadoCLS.iidTipousuario = (int) OEmpleado.IIDTIPOUSUARIO;
+                oEmpleadoCLS.iidTipocontrato = (int) OEmpleado.IIDTIPOCONTRATO;
+                oEmpleadoCLS.iidSexo = (int) OEmpleado.IIDSEXO; 
+
+                //Listando a los combos y viewBags
+                ViewBag.lista = listaTipoUsuario;
+                ViewBag.lista = listaTipoContratos;
+                ViewBag.lista = listaSexo;
+                listarCombos();
+            }
+           return View(oEmpleadoCLS);
+        }
+
+
+        [HttpPost]
+        public ActionResult Editar(EmpleadoCLS oEmpleadoCLS)
+        {
+            int idEmpleado = oEmpleadoCLS.idempleado;
+
+            if (!ModelState.IsValid)
+            {             
+                return View(oEmpleadoCLS);
+            }
+
+            //Abriendo la conexion con la base de datos;
+            using (var bd = new BDPasajeEntities1() )
+            {
+                //Recuperando el objeto y trayendo solo la primera fila es por ello que usamos el metodo.first();
+                Empleado oEmpleado = bd.Empleado.Where(p => p.IIDEMPLEADO.Equals(idEmpleado)).First();
+
+                //Recuperando los parametros para pasarlo al  modelo
+                oEmpleado.IIDEMPLEADO = oEmpleadoCLS.idempleado;
+                oEmpleado.NOMBRE = oEmpleadoCLS.nombre ;
+                oEmpleado.APPATERNO = oEmpleadoCLS.apPaterno;
+                oEmpleado.APMATERNO = oEmpleadoCLS.apMaterno ;
+                oEmpleado.FECHACONTRATO = oEmpleadoCLS.fechaContrato;
+                oEmpleado.SUELDO = oEmpleadoCLS.sueldo;
+
+                //Listas desplegables;
+                oEmpleado.IIDTIPOUSUARIO = oEmpleadoCLS.iidTipousuario;
+                oEmpleado.IIDTIPOCONTRATO = oEmpleadoCLS.iidTipocontrato;
+                oEmpleado.IIDSEXO = oEmpleadoCLS.iidSexo;
+
+                bd.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
     }
 }

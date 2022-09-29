@@ -33,14 +33,14 @@ namespace ProyectoBuses.Controllers
                                      telefonoCelular = clientes.TELEFONOCELULAR
                                  }).ToList();
             }
-         return View(listaClientes);
+            return View(listaClientes);
         }
 
         //Recuperando los valores del Sexo
         List<SelectListItem> listaSexo;
-        private void LlenarSexo() 
+        private void LlenarSexo()
         {
-            using (var bd = new BDPasajeEntities1() ) 
+            using (var bd = new BDPasajeEntities1())
             {
                 listaSexo = (from Sexo in bd.Sexo
                              where Sexo.BHABILITADO == 1
@@ -50,23 +50,21 @@ namespace ProyectoBuses.Controllers
                                  Value = Sexo.IIDSEXO.ToString()
                              }).ToList();
 
-                listaSexo.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = ""});
+                listaSexo.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
             }
         }
 
 
-        public ActionResult Agregar() 
+        public ActionResult Agregar()
         {
             LlenarSexo();
             ViewBag.lista = listaSexo;
-
-
             return View();
         }
 
 
         [HttpPost]
-        public ActionResult Agregar(ClienteCLS oClienteCLS) 
+        public ActionResult Agregar(ClienteCLS oClienteCLS)
         {
             if (!ModelState.IsValid)
             {
@@ -96,7 +94,7 @@ namespace ProyectoBuses.Controllers
 
                     bd.SaveChanges();
                 }
-             return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
         }
 
@@ -127,15 +125,43 @@ namespace ProyectoBuses.Controllers
                 //Recuperando el combo
                 LlenarSexo();
                 ViewBag.lista = listaSexo;
-
-
             }
             //Del modelo lo mandamos a la vista del programador
             return View(OclienteCLS);
         }
 
 
+        [HttpPost]
+        public ActionResult Editar(ClienteCLS oClienteCLS)
+        {
 
+            int idcliente = oClienteCLS.idcliente;
+
+            if (!ModelState.IsValid)
+            {
+
+                return View(oClienteCLS);
+            }
+
+            using (var bd = new BDPasajeEntities1())
+            {
+                Cliente oCliente = bd.Cliente.Where(p => p.IIDCLIENTE.Equals(idcliente)).First();
+
+                //Campos a editar;
+                oCliente.NOMBRE = oClienteCLS.nombre;
+                oCliente.APPATERNO = oClienteCLS.appaterno;
+                oCliente.APMATERNO = oClienteCLS.apmaterno;
+                oCliente.EMAIL = oClienteCLS.email;
+                oCliente.DIRECCION = oClienteCLS.direccion;
+                oCliente.IIDSEXO = oClienteCLS.idsexo;
+                oCliente.TELEFONOFIJO = oClienteCLS.telefonoFijo;
+                oCliente.TELEFONOCELULAR = oClienteCLS.telefonoCelular;
+
+                bd.SaveChanges();
+
+            }
+            return RedirectToAction("Index");
+        }
 
 
 

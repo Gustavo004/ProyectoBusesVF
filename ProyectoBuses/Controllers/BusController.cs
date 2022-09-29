@@ -226,17 +226,33 @@ namespace ProyectoBuses.Controllers
            return View(oBusCLS);
         }
 
+        [HttpPost]
+        public ActionResult Editar(BusCLS oBusCLS) 
+        {
+            int idBus = oBusCLS.iidbus;
 
+            if (!ModelState.IsValid)
+            {
 
+                return View(oBusCLS);
+            }
 
-
-
-
-
-
-
-
-
-
+            using (var bd = new BDPasajeEntities1() ) 
+            {
+                Bus oBus = bd.Bus.Where(p => p.IIDBUS.Equals(idBus)).First();            
+                oBus.IIDSUCURSAL = oBusCLS.iisucursal;
+                oBus.IIDTIPOBUS = oBusCLS.iidTipoBus;
+                oBus.PLACA = oBusCLS.placa;
+                oBus.FECHACOMPRA = oBusCLS.fechaCompra;
+                oBus.IIDMODELO = oBusCLS.iidModelo;
+                oBus.NUMEROFILAS = oBusCLS.numeroFilas;
+                oBus.NUMEROCOLUMNAS = oBusCLS.numeroColumnas;
+                oBus.DESCRIPCION = oBusCLS.descripcion;
+                oBus.OBSERVACION = oBusCLS.observacion;
+                oBus.IIDMARCA = oBusCLS.iidmarca;
+                bd.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

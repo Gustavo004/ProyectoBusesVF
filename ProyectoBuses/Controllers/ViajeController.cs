@@ -36,5 +36,91 @@ namespace ProyectoBuses.Controllers
             }
            return View(listaViaje);
         }
+
+
+        //Creando una lista para lista los lugares de origen y destino;
+        List<SelectListItem> listaLugar = null;
+        public void listarLugar()
+        {
+            //Agregar;
+
+            //Abriendo una conexion a la db
+            using (var bd = new BDPasajeEntities1())
+            {
+                listaLugar = (from item in bd.Lugar
+                              where item.BHABILITADO == 1
+                              select new SelectListItem
+                              {
+                                  Text = item.NOMBRE,
+                                  Value = item.IIDLUGAR.ToString()
+
+                              }).ToList();
+                listaLugar.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
+
+                //Esto lo almaceno en un ViewBag para posterior pasarlo a la vista agregar desde aqui se recupera para la vista;
+                ViewBag.listaLugar = listaLugar;
+            }
+        }
+  
+
+        //Creando una lista para lista los buses;
+        List<SelectListItem> listaBus = null;
+        public void ListarBus()
+        {
+            //Agregar;
+
+            //Abriendo una conexion a la db
+            using (var bd = new BDPasajeEntities1())
+            {
+                listaBus = (from item in bd.Bus
+                         where item.BHABILITADO == 1
+                         select new SelectListItem
+                         {
+                             Text = item.PLACA,
+                             Value = item.IIDBUS.ToString()
+
+                         }).ToList();
+                listaBus.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
+
+                //Esto lo almaceno en un ViewBag para posterior pasarlo a la vista agregar desde aqui se recupera para la vista;
+                ViewBag.listaBus = listaBus;
+            }
+        }
+
+
+
+        public void ListarCombo()
+        {
+            listarLugar();
+            ListarBus();
+        }
+
+
+
+
+
+        //Vista Agregar;
+        public ActionResult Agregar() 
+        {
+            ListarCombo();
+            return View();
+        }
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

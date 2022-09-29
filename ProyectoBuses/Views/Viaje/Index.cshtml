@@ -4,8 +4,10 @@
 @{
     ViewBag.Title = "Index";
 }
-
+<br /><br />
 <h2>Index</h2>
+
+@Html.ActionLink("Agregar","Agregar","Viaje",null , new {@class = "btn btn-primary"})
 
 <table class="table table-striped">
 
@@ -16,6 +18,7 @@
             <td>@Html.LabelFor(p => Model[0].nombreBus)</td>
             <td>@Html.LabelFor(p => Model[0].nombreLugarOrigen)</td>
             <td>@Html.LabelFor(p => Model[0].nombreLugarDestino)</td>
+            <td width="10%"><b>Operaciones</b></td>
         </tr>
     </thead>
 
@@ -23,12 +26,20 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.iidViaje</td>
-                <td>@item.nombreBus</td>
-                <td>@item.nombreLugarOrigen</td>
-                <td>@item.nombreLugarDestino</td>
-            </tr>
+        <tr>
+            <td>@item.iidViaje</td>
+            <td>@item.nombreBus</td>
+            <td>@item.nombreLugarOrigen</td>
+            <td>@item.nombreLugarDestino</td>
+
+            <td>
+                @Html.ActionLink(" ", "Editar", "Viajes", new { id = item.iidViaje }, new { @class = "glyphicon glyphicon-edit    btn btn-primary" })
+                @Html.ActionLink(" ", "Eliminar", "Viajes", new { id = item.iidViaje }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
+            </td>
+
+
+
+        </tr>
         }
     </tbody>
 

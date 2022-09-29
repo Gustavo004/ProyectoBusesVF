@@ -23,6 +23,7 @@ namespace ProyectoBuses.Models
 
 
         [Display(Name = "Precio")]
+        [Range(0,2000,ErrorMessage ="Fuera de rango")]
         [Required]
         public double precio { get; set; }
 
@@ -41,7 +42,7 @@ namespace ProyectoBuses.Models
 
 
 
-        [Display(Name = "Asientos Disponibles")]
+        [Display(Name = " # Asientos Disponibles")]
         [Required]
         public int numeroAsientosDisponibles { get; set; }
 
