@@ -3,18 +3,23 @@
 @{
     ViewBag.Title = "Agregar";
 }
-
+<br /><br />
 <h2>Agregar</h2>
 
 <div class="row">
     <div class="col-md-6">
         @using (Html.BeginForm("Agregar", "Sucursal", FormMethod.Post, new { @id = "frmAgregar" }))
         {
-            <div>
-                @Html.LabelFor(p => p.nombre)
-                @Html.TextBoxFor(p => p.nombre, new { @class = "form-control" })
-                @Html.ValidationMessage("nombre", new { @class = "text-danger" })
-            </div>
+        <div>
+            @Html.LabelFor(p => p.nombre)
+            @Html.TextBoxFor(p => p.nombre, new { @class = "form-control" })
+            @Html.ValidationMessage("nombre", new { @class = "text-danger" })
+            <!--MANDAR EL MENSAJE DE ERROR AL USUARIO EN CASO DE QUE SE HAYA ENCONTRADO UNA DUPLICIDAD-->
+            @if (Model != null && Model.mensajeError != null)
+            {
+                @Html.Label(Model.mensajeError, new { @class = "text-danger" })
+            }
+        </div>
 
 
             <div>

@@ -20,7 +20,7 @@
             <td>@Html.LabelFor(p => Model[0].email)</td>
             <td>@Html.LabelFor(p => Model[0].fechaApertura)</td>
             <td><b>Operaciones</b></td>
-           
+
 
         </tr>
 
@@ -31,21 +31,21 @@
 
         @foreach (var item in Model)
         {
-        <tr>
-            <td>@item.idsucursal</td>
-            <td>@item.nombre</td>
-            <td>@item.direccion</td>
-            <td>@item.telefono</td>
-            <td>@item.email</td>
-            <td>@item.fechaApertura</td>
+            <tr>
+                <td>@item.idsucursal</td>
+                <td>@item.nombre</td>
+                <td>@item.direccion</td>
+                <td>@item.telefono</td>
+                <td>@item.email</td>
+                <td>@item.fechaApertura</td>
 
-            <td>
-                @Html.ActionLink(" ", "Editar", "Sucursal", new { id = item.idsucursal}, new { @class = "glyphicon glyphicon-edit    btn btn-primary" })
-                @Html.ActionLink(" ", "Eliminar", "Sucursal", new { id = item.idsucursal }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
-            </td>
+                <td>
+                    @Html.ActionLink(" ", "Editar", "Sucursal", new { id = item.idsucursal }, new { @class = "glyphicon glyphicon-edit    btn btn-primary" })
+                    @Html.ActionLink(" ", "Eliminar", "Sucursal", new { id = item.idsucursal }, new { @class = "glyphicon glyphicon-trash btn btn-danger", @onclick = "eliminar()" })
+                </td>
 
 
-        </tr>
+            </tr>
         }
 
     </tbody>
@@ -53,3 +53,14 @@
 
 </table>
 
+<!--VALIDACION EN JS-->
+<script>
+    function eliminar() {
+        if (confirm("¿Desea eliminar el registro?") == 1) {
+            alert(" ¡ Se elimino correctamente !")
+        }
+        else {
+            event.preventDefault();
+        }
+    }
+</script>

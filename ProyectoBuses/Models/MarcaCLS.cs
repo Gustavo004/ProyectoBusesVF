@@ -32,6 +32,16 @@ namespace ProyectoBuses.Models
         public int bdhabilitado { get; set; }
 
 
+        //Añadiendo una propiedad para la validacion y registro unico (ERRORES DE VALIDACION)
+        public string mensajeError { get; set; }
+
+
+
+
+
+
+
+
     }
 
 

@@ -47,9 +47,20 @@ namespace ProyectoBuses.Controllers
         [HttpPost]
         public ActionResult Agregar(SucursalCLS oSucursalCLS)
         {
-            if (!ModelState.IsValid)
-            {
 
+            int nRegistroEncontrados = 0;
+            string nombreSucursal = oSucursalCLS.nombre;
+
+            //Abriendo conexion para la validacion
+            using (var bd = new BDPasajeEntities1() )
+            {
+                nRegistroEncontrados = bd.Sucursal.Where(p => p.NOMBRE.Equals(nombreSucursal)).Count();
+            }
+
+
+            if (!ModelState.IsValid || nRegistroEncontrados>=1)
+            {
+                if (nRegistroEncontrados >= 1) oSucursalCLS.mensajeError = "El nombre de la sucursal ya existe";
                 return View(oSucursalCLS);
             }
             else
@@ -103,11 +114,24 @@ namespace ProyectoBuses.Controllers
         [HttpPost]
         public ActionResult Editar(SucursalCLS oSucursalCLS)
         {
-            int idSucursal = oSucursalCLS.idsucursal;
+            int nRegistrosEncontrados = 0;
+            string nombreSucursal = oSucursalCLS.nombre;
+            int idSucursal_ = oSucursalCLS.idsucursal;
+
+
+            using (var bd = new BDPasajeEntities1() )
+            {
+                nRegistrosEncontrados = bd.Sucursal.Where(p => p.NOMBRE.Equals(nombreSucursal) && 
+                !p.IIDSUCURSAL.Equals(idSucursal_)).Count();
+            }
+
+
+           int idSucursal = oSucursalCLS.idsucursal;
 
             //Si el modelo no es valido retorna la misma vista;
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || nRegistrosEncontrados>=1 )
             {
+                if (nRegistrosEncontrados >= 1) oSucursalCLS.mensajeError = "Ya se encuentra registrada la sucursal";
                 return View(oSucursalCLS);
             }
 
@@ -125,15 +149,23 @@ namespace ProyectoBuses.Controllers
                 bd.SaveChanges();
 
             }
-
             return RedirectToAction("Index");
         }
 
+        public ActionResult Eliminar(int id)
+        {
+            using (var bd = new BDPasajeEntities1() )
+            {
+                Sucursal oSucursal = bd.Sucursal.Where(p => p.IIDSUCURSAL.Equals(id)).First();
 
+                //Cambiandole el estado de visibilidad;
+                oSucursal.BHABILITADO = 0;
 
-
-
-
+                //Guardando los cambios ;
+                bd.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
 
 
 

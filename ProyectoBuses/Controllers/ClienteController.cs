@@ -54,7 +54,7 @@ namespace ProyectoBuses.Controllers
             }
         }
 
-
+        //FALTA LA VALIDACION DE DUPLICIDAD EN EDITAR AVANZAR PUNTO 42
         public ActionResult Agregar()
         {
             LlenarSexo();
@@ -66,8 +66,28 @@ namespace ProyectoBuses.Controllers
         [HttpPost]
         public ActionResult Agregar(ClienteCLS oClienteCLS)
         {
-            if (!ModelState.IsValid)
+
+            int nregistrosEncontrados = 0;
+            //Para validar nombres;
+            string nombreCliente = oClienteCLS.nombre;
+            string apPaterno = oClienteCLS.appaterno;
+            string apMaterno = oClienteCLS.apmaterno;
+
+            using (var bd = new BDPasajeEntities1())
             {
+                nregistrosEncontrados =
+                bd.Cliente.Where(p => p.NOMBRE.Equals(nombreCliente) && //Obteniendo el nombre y comprobando que no exista;
+                p.APMATERNO.Equals(apMaterno) && //Obteniendo el apellido paterno y comprobando que no exista;
+                p.APPATERNO.Equals(apPaterno)).Count(); //Obteniendo el apellido materno y comprobando que no exista;
+            }
+
+
+            if (!ModelState.IsValid || nregistrosEncontrados>=1 )
+            {
+
+                if (nregistrosEncontrados >= 1) oClienteCLS.mensajeError = "Ya existe el cliente registrado";
+
+
                 LlenarSexo();
                 ViewBag.lista = listaSexo;
 
@@ -162,6 +182,29 @@ namespace ProyectoBuses.Controllers
             }
             return RedirectToAction("Index");
         }
+
+
+
+
+
+        public ActionResult Eliminar(int idcliente)
+        {
+            using (var bd = new BDPasajeEntities1())
+            {
+                Cliente oCliente = bd.Cliente.Where(p => p.IIDCLIENTE.Equals(idcliente)).First();
+                oCliente.BHABILITADO = 0;
+                bd.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+
+        }
+
+
+
+
+
+
 
 
 

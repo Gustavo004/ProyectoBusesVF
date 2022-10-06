@@ -7,13 +7,13 @@
 
 
 <h2>Index</h2>
-@Html.ActionLink("Agregar","Agregar","Marca",null,new {@class="btn btn-primary"})
+@Html.ActionLink("Agregar", "Agregar", "Marca", null, new { @class = "btn btn-primary" })
 
 <table class="table table-striped">
     <thead>
 
         <tr>
-            <td width="10%">@Html.LabelFor(p=>Model[0].iddmarca)</td>
+            <td width="10%">@Html.LabelFor(p => Model[0].iddmarca)</td>
             <td width="10%">@Html.LabelFor(p => Model[0].nombre)</td>
             <td width="60%">@Html.LabelFor(p => Model[0].descripcion)</td>
             <td width="10%"><b>Operaciones</b></td>
@@ -25,19 +25,61 @@
 
         @foreach (var item in Model)
         {
-        <tr>
-            <td>@item.iddmarca</td>
-            <td>@item.nombre</td>
-            <td>@item.descripcion</td>
-            <td>
-            @Html.ActionLink(" ", "Editar", "Marca", new { id = item.iddmarca }, new { @class = "glyphicon glyphicon-edit    btn btn-primary" })
-            @Html.ActionLink(" ", "Eliminar", "Marca", new { id = item.iddmarca }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
-            </td>
+            <tr>
+                <td>@item.iddmarca</td>
+                <td>@item.nombre</td>
+                <td>@item.descripcion</td>
+                <td>
+                    @Html.ActionLink(" ", "Editar", "Marca", new { id = item.iddmarca }, new { @class = "glyphicon glyphicon-edit btn btn-primary" })
 
-        </tr>
+                    <!-- Button trigger modal -->
+                    <button type="button" onclick="MostarPopUp(@item.iddmarca)" class="glyphicon glyphicon-trash btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                    </button>
+
+                </td>
+
+            </tr>
         }
 
     </tbody>
 
 
 </table>
+
+
+<!-- Para eliminar un registro de forma logica -->
+@using (Html.BeginForm("Eliminar", "Marca", FormMethod.Post, new { @id = "frmEliminar" }))
+{
+    @Html.Hidden("iddmarca");
+
+}
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea guardar los cambios?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:1em">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="Agregar()" class="btn btn-success">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function MostarPopUp(iddmarca) {
+        document.getElementById("iddmarca").value = iddmarca;
+    }
+
+    function Agregar() {
+        var frmEliminar = document.getElementById("frmEliminar");
+        frmEliminar.submit();
+    }
+
+</script>

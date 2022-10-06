@@ -68,5 +68,16 @@ namespace ProyectoBuses.Models
 
 
 
+
+
+        //Mensaje Error ;
+        public string mensajeError { get; set; }
+
+
+
+
+
+
+
     }
 }
