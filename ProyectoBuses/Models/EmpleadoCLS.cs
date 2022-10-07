@@ -70,7 +70,7 @@ namespace ProyectoBuses.Models
         [Display(Name = "Tipo Usuario")]
         public string nombreTipoUsuario { get; set; }
 
-
+        public string mensajeError { get; set; }
 
 
 

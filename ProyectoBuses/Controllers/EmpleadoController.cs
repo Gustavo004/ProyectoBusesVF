@@ -12,13 +12,10 @@ namespace ProyectoBuses.Controllers
         // GET: Empleado
         public ActionResult Index()
         {
-
             //Listado de usarios  Desde la base de datos ;
-
             List<EmpleadoCLS> listaEmpleados = null;
             using (var bd = new BDPasajeEntities1() ) 
             {
-
                 listaEmpleados = (from empleado in bd.Empleado
                                   join tipousuario in bd.TipoUsuario
                                   on empleado.IIDTIPOUSUARIO equals tipousuario.IIDTIPOUSUARIO
@@ -144,39 +141,51 @@ namespace ProyectoBuses.Controllers
         [HttpPost]
         public ActionResult Agregar(EmpleadoCLS oEmpleadoCLS)
         {
-
-            if (!ModelState.IsValid)
+            int nregistroAfectados = 0;
+            string nombre = oEmpleadoCLS.nombre;
+            string apPaterno = oEmpleadoCLS.apPaterno;
+            string apMaterno = oEmpleadoCLS.apMaterno;
+            using (var bd=new BDPasajeEntities1())
             {
-                listarCombos();
-
-                ViewBag.lista = listaTipoUsuario;
-                ViewBag.lista = listaTipoContratos;
-                ViewBag.lista = listaSexo;
-
-                return View(oEmpleadoCLS);
+                nregistroAfectados = bd.Empleado.Where(
+                    p => p.NOMBRE.Equals(nombre) &&
+                    p.APPATERNO.Equals(apPaterno) &&
+                    p.APMATERNO.Equals(apMaterno)).Count();
             }
-            else 
-            {
-                using (var bd = new BDPasajeEntities1())
+
+                if (!ModelState.IsValid || nregistroAfectados>=1)
                 {
-                    Empleado oEmpleado = new Empleado();
+                if (nregistroAfectados >= 1) oEmpleadoCLS.mensajeError = "El empleado ya existe";
+                    listarCombos();
 
-                    oEmpleado.NOMBRE = oEmpleadoCLS.nombre;
-                    oEmpleado.APPATERNO = oEmpleadoCLS.apPaterno;
-                    oEmpleado.APMATERNO = oEmpleadoCLS.apMaterno;
+                    ViewBag.lista = listaTipoUsuario;
+                    ViewBag.lista = listaTipoContratos;
+                    ViewBag.lista = listaSexo;
 
-                    oEmpleado.FECHACONTRATO = oEmpleadoCLS.fechaContrato;
-                    oEmpleado.SUELDO = oEmpleadoCLS.sueldo;
-                    oEmpleado.IIDTIPOUSUARIO = oEmpleadoCLS.iidTipousuario;
-                    oEmpleado.IIDTIPOCONTRATO = oEmpleadoCLS.iidTipocontrato;
-                    oEmpleado.IIDSEXO = oEmpleadoCLS.iidSexo;
-                    oEmpleado.BHABILITADO = 1;
-
-                    bd.Empleado.Add(oEmpleado);
-                    bd.SaveChanges();
+                    return View(oEmpleadoCLS);
                 }
-               return RedirectToAction("Index");
-            }         
+                else
+                {
+                    using (var bd = new BDPasajeEntities1())
+                    {
+                        Empleado oEmpleado = new Empleado();
+
+                        oEmpleado.NOMBRE = oEmpleadoCLS.nombre;
+                        oEmpleado.APPATERNO = oEmpleadoCLS.apPaterno;
+                        oEmpleado.APMATERNO = oEmpleadoCLS.apMaterno;
+
+                        oEmpleado.FECHACONTRATO = oEmpleadoCLS.fechaContrato;
+                        oEmpleado.SUELDO = oEmpleadoCLS.sueldo;
+                        oEmpleado.IIDTIPOUSUARIO = oEmpleadoCLS.iidTipousuario;
+                        oEmpleado.IIDTIPOCONTRATO = oEmpleadoCLS.iidTipocontrato;
+                        oEmpleado.IIDSEXO = oEmpleadoCLS.iidSexo;
+                        oEmpleado.BHABILITADO = 1;
+
+                        bd.Empleado.Add(oEmpleado);
+                        bd.SaveChanges();
+                    }
+                    return RedirectToAction("Index");
+                }         
         }
 
         //Vista para el action Result
@@ -216,10 +225,22 @@ namespace ProyectoBuses.Controllers
         [HttpPost]
         public ActionResult Editar(EmpleadoCLS oEmpleadoCLS)
         {
+            int nregistroAfectados = 0;
             int idEmpleado = oEmpleadoCLS.idempleado;
-
-            if (!ModelState.IsValid)
-            {             
+            string nombre = oEmpleadoCLS.nombre;
+            string apPaterno = oEmpleadoCLS.apPaterno;
+            string apMaterno = oEmpleadoCLS.apMaterno;
+            using (var bd = new BDPasajeEntities1())
+            {
+                nregistroAfectados = bd.Empleado.Where(p => p.NOMBRE.Equals(nombre)
+                  && p.APPATERNO.Equals(apPaterno)
+                  && p.APMATERNO.Equals(apMaterno)
+                  && !p.IIDEMPLEADO.Equals(idEmpleado)).Count();
+            }
+            if (!ModelState.IsValid || nregistroAfectados >=1)
+            {
+                if (nregistroAfectados >= 1) oEmpleadoCLS.mensajeError = "Ya existe el empleado";
+                listarCombos();
                 return View(oEmpleadoCLS);
             }
 
@@ -247,5 +268,16 @@ namespace ProyectoBuses.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult Eliminar(int txtIdEmpleado)
+        {
+            using(var bd=new BDPasajeEntities1())
+            {
+                Empleado emp = bd.Empleado.Where(p => p.IIDEMPLEADO.Equals(txtIdEmpleado)).First();
+                emp.BHABILITADO = 0;
+                bd.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -111,7 +111,7 @@ namespace ProyectoBuses.Controllers
             int nRegistrosEncontrados = 0;
             //AVANZA AQUI:
             int idMarca_ = oMarcaCLS.iddmarca;
-
+            string nombreMarca = oMarcaCLS.nombre;
 
             using (var bd = new BDPasajeEntities1() ) 
             {
