@@ -83,11 +83,8 @@ namespace ProyectoBuses.Controllers
 
 
             if (!ModelState.IsValid || nregistrosEncontrados>=1 )
-            {
-
+              { 
                 if (nregistrosEncontrados >= 1) oClienteCLS.mensajeError = "Ya existe el cliente registrado";
-
-
                 LlenarSexo();
                 ViewBag.lista = listaSexo;
 
@@ -154,12 +151,23 @@ namespace ProyectoBuses.Controllers
         [HttpPost]
         public ActionResult Editar(ClienteCLS oClienteCLS)
         {
-
+            int nregistroEncontrados = 0;
             int idcliente = oClienteCLS.idcliente;
-
-            if (!ModelState.IsValid)
+            string nombre = oClienteCLS.nombre; 
+            string apPaterno = oClienteCLS.appaterno;
+            string apMaterno = oClienteCLS.apmaterno;
+            using(var bd=new BDPasajeEntities1())
             {
+                nregistroEncontrados=bd.Cliente.Where(p => p.NOMBRE.Equals(nombre) &&
+                p.APPATERNO.Equals(apPaterno) && 
+                p.APMATERNO.Equals(apMaterno) &&
+                !p.IIDCLIENTE.Equals(idcliente)).Count();
+            } 
 
+            if (!ModelState.IsValid || nregistroEncontrados>=1)
+            {
+                if (nregistroEncontrados >= 1) oClienteCLS.mensajeError = "Ya existe el cliente";
+                LlenarSexo();
                 return View(oClienteCLS);
             }
 
