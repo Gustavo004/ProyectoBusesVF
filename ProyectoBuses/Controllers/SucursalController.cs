@@ -10,27 +10,44 @@ namespace ProyectoBuses.Controllers
     public class SucursalController : Controller
     {
         // GET: Sucursal
-        public ActionResult Index()
+        public ActionResult Index(SucursalCLS oSucursalCLS)
         {
-
+            string nombre = oSucursalCLS.nombre;
             //Creando la lista;
             List<SucursalCLS> listaSucursal = null;
 
             //Abriendo conexion bd
             using (var bd = new BDPasajeEntities1())
             {
-                listaSucursal = (from sucursal in bd.Sucursal
-                                 where sucursal.BHABILITADO == 1
-
-                                 select new SucursalCLS
-                                 {
-                                     idsucursal = sucursal.IIDSUCURSAL,
-                                     nombre = sucursal.NOMBRE,
-                                     direccion = sucursal.DIRECCION,
-                                     telefono = sucursal.TELEFONO,
-                                     email = sucursal.EMAIL,
-                                     fechaApertura = (DateTime)sucursal.FECHAAPERTURA
-                                 }).ToList();
+                if (nombre == null)
+                {
+                    listaSucursal = (from sucursal in bd.Sucursal
+                                     where sucursal.BHABILITADO == 1
+                                     select new SucursalCLS
+                                     {
+                                         idsucursal = sucursal.IIDSUCURSAL,
+                                         nombre = sucursal.NOMBRE,
+                                         direccion = sucursal.DIRECCION,
+                                         telefono = sucursal.TELEFONO,
+                                         email = sucursal.EMAIL,
+                                         fechaApertura = (DateTime)sucursal.FECHAAPERTURA
+                                     }).ToList();
+                }
+                else
+                {
+                    listaSucursal = (from sucursal in bd.Sucursal
+                                     where sucursal.BHABILITADO == 1 && sucursal.NOMBRE.Contains(nombre)
+                                     select new SucursalCLS
+                                     {
+                                         idsucursal = sucursal.IIDSUCURSAL,
+                                         nombre = sucursal.NOMBRE,
+                                         direccion = sucursal.DIRECCION,
+                                         telefono = sucursal.TELEFONO,
+                                         email = sucursal.EMAIL,
+                                         fechaApertura = (DateTime)sucursal.FECHAAPERTURA
+                                     }).ToList();
+                }
+                
             }
             return View(listaSucursal);
         }

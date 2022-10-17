@@ -10,27 +10,51 @@ namespace ProyectoBuses.Controllers
     public class EmpleadoController : Controller
     {
         // GET: Empleado
-        public ActionResult Index()
+        public ActionResult Index(EmpleadoCLS oEmpleadoCLS)
         {
             //Listado de usarios  Desde la base de datos ;
             List<EmpleadoCLS> listaEmpleados = null;
+            int idTipoUsuario = oEmpleadoCLS.iidTipousuario;
+            listaTipoUsuarios();
             using (var bd = new BDPasajeEntities1() ) 
             {
-                listaEmpleados = (from empleado in bd.Empleado
-                                  join tipousuario in bd.TipoUsuario
-                                  on empleado.IIDTIPOUSUARIO equals tipousuario.IIDTIPOUSUARIO
-                                  join tipocontrato in bd.TipoContrato
-                                  on empleado.IIDTIPOCONTRATO equals tipocontrato.IIDTIPOCONTRATO
-                                  where empleado.BHABILITADO==1
-                                  select new EmpleadoCLS
-                                  {
-                                      idempleado = empleado.IIDEMPLEADO,
-                                      nombre = empleado.NOMBRE,
-                                      apPaterno = empleado.APPATERNO,
-                                      apMaterno = empleado.APMATERNO,
-                                      nombreTipoUsuario = tipousuario.NOMBRE,
-                                      nombreTipocontrato = tipocontrato.NOMBRE
-                                  }).ToList();                           
+                if (idTipoUsuario == 0)
+                {
+                    listaEmpleados = (from empleado in bd.Empleado
+                                      join tipousuario in bd.TipoUsuario
+                                      on empleado.IIDTIPOUSUARIO equals tipousuario.IIDTIPOUSUARIO
+                                      join tipocontrato in bd.TipoContrato
+                                      on empleado.IIDTIPOCONTRATO equals tipocontrato.IIDTIPOCONTRATO
+                                      where empleado.BHABILITADO == 1
+                                      select new EmpleadoCLS
+                                      {
+                                          idempleado = empleado.IIDEMPLEADO,
+                                          nombre = empleado.NOMBRE,
+                                          apPaterno = empleado.APPATERNO,
+                                          apMaterno = empleado.APMATERNO,
+                                          nombreTipoUsuario = tipousuario.NOMBRE,
+                                          nombreTipocontrato = tipocontrato.NOMBRE
+                                      }).ToList();
+                }
+                else
+                {
+                    listaEmpleados = (from empleado in bd.Empleado
+                                      join tipousuario in bd.TipoUsuario
+                                      on empleado.IIDTIPOUSUARIO equals tipousuario.IIDTIPOUSUARIO
+                                      join tipocontrato in bd.TipoContrato
+                                      on empleado.IIDTIPOCONTRATO equals tipocontrato.IIDTIPOCONTRATO
+                                      where empleado.BHABILITADO == 1 && empleado.IIDTIPOUSUARIO==idTipoUsuario
+                                      select new EmpleadoCLS
+                                      {
+                                          idempleado = empleado.IIDEMPLEADO,
+                                          nombre = empleado.NOMBRE,
+                                          apPaterno = empleado.APPATERNO,
+                                          apMaterno = empleado.APMATERNO,
+                                          nombreTipoUsuario = tipousuario.NOMBRE,
+                                          nombreTipocontrato = tipocontrato.NOMBRE
+                                      }).ToList();
+                }
+                                   
             }
             return View(listaEmpleados);
         }
@@ -54,7 +78,7 @@ namespace ProyectoBuses.Controllers
                              Value = sexo.IIDSEXO.ToString()
 
                          }).ToList();
-                listaSexo.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
+                listaSexo.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
 
               //Esto lo almaceno en un ViewBag para posterior pasarlo a la vista agregar desde aqui se recupera para la vista;
               ViewBag.listaSexo = listaSexo;
@@ -80,7 +104,7 @@ namespace ProyectoBuses.Controllers
                              Value = tipousuario.IIDTIPOUSUARIO.ToString()
 
                          }).ToList();
-                listaTipoUsuario.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
+                listaTipoUsuario.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
                 ViewBag.listaTipoUsuarios = listaTipoUsuario;
             }     
         }

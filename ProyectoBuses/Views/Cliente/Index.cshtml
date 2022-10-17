@@ -1,16 +1,19 @@
 ﻿@using ProyectoBuses.Models
 @model List<ClienteCLS>
-
-
-
 @{
     ViewBag.Title = "Index";
+    List<SelectListItem> listaSexo = (List<SelectListItem>)ViewBag.lista;
+ 
 }
 
 
 <h2>Index</h2>
 @Html.ActionLink("Agregar", "Agregar", "Cliente", null, new { @class = "btn btn-primary" })
 
+@using(Html.BeginForm("Index", "Cliente", FormMethod.Post)) { 
+    @Html.Label("Genero del cliente")
+    @Html.DropDownList("idsexo",listaSexo)
+}
 <table class="table table-striped">
 
     <thead>
@@ -61,10 +64,10 @@
 <!-- Para eliminar un registro de forma logica -->
 
 @using (Html.BeginForm("Eliminar", "Cliente", FormMethod.Post, new { @id = "frmEliminar" }))
-{ 
+{
 
     @Html.Hidden("idcliente");
-     
+
 }
 
 
@@ -96,5 +99,9 @@
         frmEliminar.submit();
 
     }
-
+    let idgenero = document.getElementById("idsexo");
+    idgenero.addEventListener("change", (e) => {
+        let frmBusqueda = e.target.parentNode;
+        frmBusqueda.submit();
+    })
 </script>

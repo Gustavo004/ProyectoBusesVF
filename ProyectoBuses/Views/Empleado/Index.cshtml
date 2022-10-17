@@ -3,12 +3,19 @@
 
 @{
     ViewBag.Title = "Index";
+    List<SelectListItem> listaUsuario = (List<SelectListItem>) ViewBag.listaTipoUsuarios;
 }
 
 <h2>Index</h2>
 
 @Html.ActionLink("Agregar", "Agregar", "Empleado", null, new { @class = "btn btn-primary" })
 
+@using(Html.BeginForm("Index", "Empleado", FormMethod.Get)) 
+{
+    @Html.Label("Ingresa tipo de Usuario")
+    @Html.DropDownList("iidTipousuario", listaUsuario)
+
+}
 
 <table class="table table-hover table table-striped">
 
@@ -75,4 +82,9 @@
         var frmEmpleado = document.getElementById("frmEmpleado");
         frmEmpleado.submit();
     }
+    let tipoUsuario = document.getElementById("iidTipousuario");
+    tipoUsuario.addEventListener("change", (e) => {
+        const form = e.target.parentNode;
+        form.submit();
+    })
 </script>
