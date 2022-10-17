@@ -9,6 +9,12 @@
 <h2>Index</h2>
 @Html.ActionLink("Agregar", "Agregar", "Marca", null, new { @class = "btn btn-primary" })
 
+@using(Html.BeginForm("Index","Marca",FormMethod.Post))
+ {
+    <label>Ingrese nombre marca</label>
+    @Html.TextBox("nombre")
+    <input type="submit" class="btn btn-success" value="Buscar"/>
+ }
 <table class="table table-striped">
     <thead>
 

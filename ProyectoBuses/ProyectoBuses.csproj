@@ -293,6 +293,8 @@
     <Compile Include="Models\TipoUsuario.cs">
       <DependentUpon>BDPasajes.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TipoUsuarioCLS.cs" />
+    <Compile Include="Controllers\TipoUsuarioController.cs" />
     <Compile Include="Models\TIPOUSUARIOREGISTRO.cs">
       <DependentUpon>BDPasajes.tt</DependentUpon>
     </Compile>
@@ -349,6 +351,7 @@
     <Content Include="Views\Bus\Editar.cshtml" />
     <Content Include="Views\Empleado\Editar.cshtml" />
     <Content Include="Views\Viaje\Agregar.cshtml" />
+    <Content Include="Views\TipoUsuario\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

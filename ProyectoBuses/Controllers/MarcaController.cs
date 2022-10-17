@@ -12,23 +12,36 @@ namespace ProyectoBuses.Controllers
     public class MarcaController : Controller
     {
         // GET: Marca
-        public ActionResult Index()
+        public ActionResult Index(MarcaCLS omarcaCLS)
         {
+            string nombreMarca = omarcaCLS.nombre;
             List<MarcaCLS> listaMarca = null;
-
             //Abriendo conexión a la base de datos;
             using (var bd = new BDPasajeEntities1())
             {
+                if (nombreMarca == null)
+                {
                 //Creando una lista y recorriendo el modelo ;
-                listaMarca = (from marca in bd.Marca
+                    listaMarca = (from marca in bd.Marca
                               where marca.BHABILITADO == 1
-
                               select new MarcaCLS
                               {
                                   iddmarca = marca.IIDMARCA,
                                   nombre = marca.NOMBRE,
                                   descripcion = marca.DESCRIPCION
                               }).ToList();
+                }
+                else
+                {
+                    listaMarca = (from marca in bd.Marca
+                                  where marca.BHABILITADO == 1 && marca.NOMBRE.Contains(nombreMarca)
+                                  select new MarcaCLS
+                                  {
+                                      iddmarca = marca.IIDMARCA,
+                                      nombre = marca.NOMBRE,
+                                      descripcion = marca.DESCRIPCION
+                                  }).ToList();
+                }
             }
 
             return View(listaMarca);

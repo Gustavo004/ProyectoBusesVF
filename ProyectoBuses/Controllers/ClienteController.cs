@@ -10,28 +10,46 @@ namespace ProyectoBuses.Controllers
     public class ClienteController : Controller
     {
         // GET: Cliente
-        public ActionResult Index()
+        public ActionResult Index(ClienteCLS oClienteCLS)
         {
-
+            int iidgenero = oClienteCLS.idsexo;
             //Creando la lista;
             List<ClienteCLS> listaClientes = null;
-
+            LlenarSexo();
             //Abriendo conexion bd
             using (var bd = new BDPasajeEntities1())
             {
-                listaClientes = (from clientes in bd.Cliente
-                                 where clientes.BHABILITADO == 1
-
-                                 select new ClienteCLS
-                                 {
-                                     idcliente = clientes.IIDCLIENTE,
-                                     nombre = clientes.NOMBRE,
-                                     appaterno = clientes.APPATERNO,
-                                     apmaterno = clientes.APMATERNO,
-                                     email = clientes.EMAIL,
-                                     direccion = clientes.DIRECCION,
-                                     telefonoCelular = clientes.TELEFONOCELULAR
-                                 }).ToList();
+                if (iidgenero == 0)
+                {
+                    listaClientes = (from clientes in bd.Cliente
+                                     where clientes.BHABILITADO == 1
+                                     select new ClienteCLS
+                                     {
+                                         idcliente = clientes.IIDCLIENTE,
+                                         nombre = clientes.NOMBRE,
+                                         appaterno = clientes.APPATERNO,
+                                         apmaterno = clientes.APMATERNO,
+                                         email = clientes.EMAIL,
+                                         direccion = clientes.DIRECCION,
+                                         telefonoCelular = clientes.TELEFONOCELULAR
+                                     }).ToList();
+                }
+                else
+                {
+                    listaClientes = (from clientes in bd.Cliente
+                                     where clientes.BHABILITADO == 1 && clientes.IIDSEXO==iidgenero
+                                     select new ClienteCLS
+                                     {
+                                         idcliente = clientes.IIDCLIENTE,
+                                         nombre = clientes.NOMBRE,
+                                         appaterno = clientes.APPATERNO,
+                                         apmaterno = clientes.APMATERNO,
+                                         email = clientes.EMAIL,
+                                         direccion = clientes.DIRECCION,
+                                         telefonoCelular = clientes.TELEFONOCELULAR
+                                     }).ToList();
+                }
+                
             }
             return View(listaClientes);
         }
@@ -50,7 +68,7 @@ namespace ProyectoBuses.Controllers
                                  Value = Sexo.IIDSEXO.ToString()
                              }).ToList();
 
-                listaSexo.Insert(0, new SelectListItem { Text = "SELECCIONE", Value = "" });
+                listaSexo.Insert(0, new SelectListItem { Text = "--Seleccione--", Value = "" });
             }
         }
 
