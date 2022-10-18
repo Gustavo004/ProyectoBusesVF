@@ -1,0 +1,30 @@
+﻿@using ProyectoBuses.Models;
+@model List<PaginaCLS>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>@Html.LabelFor(p => Model[0].iidpagina)</td>
+            <td>@Html.LabelFor(p => Model[0].mensaje)</td>
+            <td>@Html.LabelFor(p => Model[0].accion)</td>
+            <td>@Html.LabelFor(p => Model[0].controlador)</td>
+        </tr>
+
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.iidpagina</td>
+                <td>@item.mensaje</td>
+                <td>@item.accion</td>
+                <td>@item.controlador</td>
+
+            </tr>
+        }
+
+    </tbody>
+
+
+</table>
