@@ -59,5 +59,25 @@ namespace ProyectoBuses.Controllers
             }
             return PartialView("_TablaPagina",listaPagina);
         }
+        public int Guardar(Pagina oPaginaCLS,int titulo)
+        {
+            int rpta = 0;
+            using(var bd=new BDPasajeEntities1())
+            {
+                if (titulo == 1)
+                {
+                    Pagina oPagina = new Pagina();
+                    oPagina.MENSAJE = oPaginaCLS.MENSAJE;
+                    oPagina.ACCION = oPaginaCLS.ACCION;
+                    oPagina.CONTROLADOR = oPaginaCLS.CONTROLADOR;
+                    oPagina.BHABILITADO = 1;
+                    bd.Pagina.Add(oPagina);
+                    rpta=bd.SaveChanges();
+
+                }
+            }
+            return rpta;
+
+        }
     }
 }

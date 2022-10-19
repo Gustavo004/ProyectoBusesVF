@@ -15,7 +15,35 @@
     @Html.TextBox("nombre")
     <input type="submit" class="btn btn-success" value="Buscar"/>
  }
+<table class="table table-hover table table-striped">
 
+    <thead>
+
+        <tr>
+            <td>@Html.LabelFor(p => Model[0].iddmarca)</td>
+            <td>@Html.LabelFor(p => Model[0].nombre)</td>
+            <td>@Html.LabelFor(p => Model[0].descripcion)</td>
+            <td width="10%"><b>Operaciones</b></td>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.iddmarca</td>
+                <td>@item.nombre</td>
+                <td>@item.descripcion</td>
+                <td>
+                    @Html.ActionLink(" ", "Editar", "Empleado", new { id = item.iddmarca }, new { @class = "glyphicon glyphicon-edit    btn btn-primary" })
+                    <!-- Button trigger modal -->
+                    <button type="button" onclick="MostarPopUp(@item.iddmarca)" class="glyphicon glyphicon-trash btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 
 <!-- Para eliminar un registro de forma logica -->

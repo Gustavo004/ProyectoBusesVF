@@ -9,6 +9,7 @@ namespace ProyectoBuses.Controllers
 {
     public class ClienteController : Controller
     {
+        List<SelectListItem> listaSexo;
         // GET: Cliente
         public ActionResult Index(ClienteCLS oClienteCLS)
         {
@@ -16,6 +17,7 @@ namespace ProyectoBuses.Controllers
             //Creando la lista;
             List<ClienteCLS> listaClientes = null;
             LlenarSexo();
+            ViewBag.lista = listaSexo;
             //Abriendo conexion bd
             using (var bd = new BDPasajeEntities1())
             {
@@ -55,7 +57,7 @@ namespace ProyectoBuses.Controllers
         }
 
         //Recuperando los valores del Sexo
-        List<SelectListItem> listaSexo;
+        
         private void LlenarSexo()
         {
             using (var bd = new BDPasajeEntities1())

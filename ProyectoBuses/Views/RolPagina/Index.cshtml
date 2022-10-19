@@ -1,30 +1,31 @@
-﻿@using ProyectoBuses.Models;
-@model List<PaginaCLS>
-
+﻿@using ProyectoBuses.Models
+@model List<RolPaginaCLS>
 @{
     ViewBag.Title = "Index";
+    List<SelectListItem> listaRol = (List<SelectListItem>)ViewBag.listaRol;
+    List<SelectListItem> listaPagina = (List<SelectListItem>)ViewBag.listaPagina;
 }
 
 <h2>Index</h2>
+<!-- boton agregar -->
 <button type="button" onclick="Agregar()" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
     Agregar
 </button>
-<br />
+
+<!-- Filtro -->
 @using (Ajax.BeginForm("Filtrar", "", new AjaxOptions
 {
     HttpMethod = "POST",
-    UpdateTargetId = "divPagina",
+    UpdateTargetId = "divRolPagina",
     InsertionMode = InsertionMode.Replace
-}, new { @id = "frmFiltrar" }))
-{
-    @Html.Label("Ingrese mensaje");
-    @Html.TextBox("mensaje", null, new { @class = "form-control" });
+}, new {@id="frmFiltrado" })){
+    @Html.DropDownList("iidrol", listaRol,new { @class="form-control"})
 }
-<br />
-<div id="divPagina">
-    @Html.Partial("_TablaPagina",Model)
+<div id="divRolPagina">
+    @Html.Partial("_TableRolPagina", Model);
 </div>
 
+<!--Modal-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -32,29 +33,25 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
             </div>
-            @using (Ajax.BeginForm("Guardar", "Pagina", null, new AjaxOptions
+            @using (Ajax.BeginForm("Guardar", "RolPagina", null, new AjaxOptions
             {
                 HttpMethod = "Post",
                 OnSuccess = "Guardar"
             }))
             {
-                @Html.Hidden("Titulo")
+                @Html.Hidden("titulo")
                 <div class="modal-body">
                     <div>
-                        @Html.Label("Id Pagina")
-                        @Html.TextBox("iidpagina", null, new { @class = "form-control", @readOnly = true })
+                        @Html.Label("Id Rol Pagina")
+                        @Html.TextBox("iidrolpagina", null, new { @class = "form-control", @readOnly = true })
                     </div>
                     <div>
-                        @Html.Label("Mensaje Link")
-                        @Html.TextBox("mensaje", null, new { @class = "form-control" })
+                        @Html.Label("Nombre Rol")
+                        @Html.DropDownList("iidrol", listaRol, new { @class = "form-control" })
                     </div>
                     <div>
-                        @Html.Label("Acción")
-                        @Html.TextBox("accion", null, new { @class = "form-control" })
-                    </div>
-                    <div>
-                        @Html.Label("Controlador")
-                        @Html.TextBox("controlador", null, new { @class = "form-control" })
+                        @Html.Label("Nombre Pagina")
+                        @Html.DropDownList("iidpagina", listaPagina, new { @class = "form-control" })
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -65,22 +62,23 @@
         </div>
     </div>
 </div>
+
 <script>
-    let mensaje = document.getElementById("mensaje");
-    
-    mensaje.addEventListener("keyup", (e) => {
-        $("#frmFiltrar").trigger("submit");
+    let iidrol = document.getElementById("iidrol");
+    iidrol.addEventListener("change", () => {
+        $("#frmFiltrado").trigger("submit");
     })
+    // añade el valor de 1 que significa agregar
     function Agregar() {
-        document.getElementById("Titulo").value = 1;
+        document.getElementById("titulo").value = 1;
     }
-    function Guardar(result) {
-        if (result == 1) {
-            $("#frmFiltrar").trigger("submit");
+    function Guardar(rpta) {
+        if (rpta == 1) {
+            $("#frmFiltrado").trigger("submit");
             document.getElementById("btnClose").click();
-            alert("Se agrego correctamente");
+            alert("Se ejecuto correctamente")
         } else {
-            alert("Ocurrio un errorr")
+            alert("Ocurrio un error");
         }
     }
 </script>
