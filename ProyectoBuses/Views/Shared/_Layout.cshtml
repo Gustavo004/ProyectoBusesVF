@@ -6,18 +6,10 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
 
 
-    @*<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-        <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <script src="~/Scripts/modernizr-2.8.3.js"></script>*@
-
 
     <!--Borrar lo de abajo de ser necesairop-->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <!-- <script src="~/Scripts/jquery-3.4.1.min.js"></script>-->
-
-
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css"/>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -35,6 +27,10 @@
                 @Html.ActionLink("Buses", "Index", "Bus", new { area = "" }, new { @class = "navbar-brand" })
                 @Html.ActionLink("Viajes", "Index", "Viaje", new { area = "" }, new { @class = "navbar-brand" })
                 @Html.ActionLink("Tipo Usuario", "Index", "TipoUsuario", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Usuario", "Index", "Usuario", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Rol", "Index", "Rol", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Pagina", "Index", "Pagina", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Rol Pagina", "Index", "RolPagina", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -53,19 +49,8 @@
 
     @*Cuidado con borrar , usa tu criterio *@
 
-    @*<script src="~/Scripts/jquery-3.4.1.min.js"></script>
-        <script src="~/Scripts/bootstrap.min.js"></script>*@
-
-    
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <!-- <script src="~/Scripts/jquery-3.4.1.min.js"></script>-->
-
-
-
-
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
 </body>
 </html>

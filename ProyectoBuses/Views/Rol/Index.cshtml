@@ -1,0 +1,80 @@
+﻿@using ProyectoBuses.Models;
+@model List<RolCLS>
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Index</h2>
+<button type="button" onclick="Agregar()" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Agregar
+</button>
+@using (Ajax.BeginForm("Filtro", "", new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "divRol",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmFiltro" }))
+{
+    @Html.Label("Ingrese nombre rol");
+    @Html.TextBox("nombre", null, new { @class = "form-control" })
+}
+<br />
+<div id="divRol">
+    @Html.Partial("_TablaRol", Model);
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            @using (Ajax.BeginForm("Guardar", "Rol", null, new AjaxOptions
+            {
+                HttpMethod = "Post",
+                OnSuccess = "Guardar"
+            }))
+            {
+                @Html.Hidden("Titulo")
+                <div class="modal-body">
+                    <div>
+                        @Html.Label("Id Rol")
+                        @Html.TextBox("iidRol", null, new { @class = "form-control", @readOnly = true })
+                    </div>
+                    <div>
+                        @Html.Label("Nombre Rol")
+                        @Html.TextBox("nombre", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Descripcion Rol")
+                        @Html.TextBox("descripcion", null, new { @class = "form-control" })
+                    </div>
+                </div>
+            <div class="modal-footer">
+                <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    let nombre = document.getElementById("nombre");
+    nombre.addEventListener("keyup", () => {
+        $("#frmFiltro").trigger("submit");
+    })
+    function Agregar() {
+        document.getElementById("Titulo").value = 1;
+
+    }
+    function Guardar(resultado) {
+        if (resultado == 1) {
+            $("#frmFiltro").trigger("submit");
+            document.getElementById("btnClose").click();
+            alert("Se guardo correctamente")
+        } else {
+            alert("Ocurrio un error")
+        }
+    }
+</script>

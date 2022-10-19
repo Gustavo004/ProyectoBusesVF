@@ -1,0 +1,98 @@
+﻿@using ProyectoBuses.Models;
+@model List<UsuarioCLS>
+@{
+    ViewBag.Title = "Index";
+    List<SelectListItem> listaPersona = (List<SelectListItem>)ViewBag.listaPersonas;
+    List<SelectListItem> listaRol = (List<SelectListItem>)ViewBag.listaRol;
+}
+
+<h2>Index</h2>
+<!-- boton agregar -->
+<button type="button" onclick="Agregar()" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Agregar
+</button>
+@using (Ajax.BeginForm("Filtrar", "Usuario", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "divUsuario",
+    InsertionMode = InsertionMode.Replace
+
+},new { @id="frmFiltro"}))
+{
+    @Html.Label("Ingrese nombre de la presona")
+    @Html.TextBox("nombrePersona",null,new { @class ="form-control"})
+}
+<!--Tabla-->
+<div id="divUsuario">
+    @Html.Partial("_TablaUsuario", Model);
+</div>
+<!--modal-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            @using (Ajax.BeginForm("Guardar", "Usuario", null, new AjaxOptions
+            {
+                HttpMethod = "Post",
+                OnSuccess = "Guardar"
+            }))
+            {
+                @Html.Hidden("titulo")
+                @Html.Hidden("nombrePersona",null,new {@id= "nombrePersonaModal" })
+                <div class="modal-body">
+                    <div>
+                        @Html.Label("Id Usuario")
+                        @Html.TextBox("iidusuario", null, new { @class = "form-control", @readOnly = true })
+                    </div>
+                    <div>
+                        @Html.Label("Nombre Usuario")
+                        @Html.TextBox("nombreusuario", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Contraseña")
+                        @Html.Password("contra", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Personas")
+                        @Html.DropDownList("iid", listaPersona, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Nombre Rol")
+                        @Html.DropDownList("iidrol", listaRol, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    function Agregar() {
+        document.getElementById("titulo").value = 1
+
+    }
+    let persona = document.getElementById("iid")
+    persona.addEventListener("change", () => {
+        document.getElementById("nombrePersonaModal").value = iid.options[iid.selectedIndex].text;
+       // console.log(document.getElementById("nombrePersonaModal"))
+    })
+    function Guardar(rpta) {
+        if (rpta >= 1) {
+            alert("Se ejecuto correctamente");
+            document.getElementById("btnClose").click();
+        } else {
+            alert("Ocurrio un error")
+        }
+    }
+    let search = document.getElementById("nombrePersona");
+    search.addEventListener("keyup", () => {
+        $("#frmFiltro").trigger("submit");
+    })
+
+</script>
