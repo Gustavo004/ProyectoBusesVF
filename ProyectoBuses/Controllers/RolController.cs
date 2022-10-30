@@ -13,7 +13,7 @@ namespace ProyectoBuses.Controllers
         public ActionResult Index()
         {
             List<RolCLS> listaRol = new List<RolCLS>();
-            using(var bd=new BDPasajeEntities1())
+            using (var bd = new BDPasajeEntities1())
             {
                 listaRol = (from rol in bd.Rol
                             where rol.BHABILITADO == 1
@@ -26,12 +26,12 @@ namespace ProyectoBuses.Controllers
             }
             return View(listaRol);
         }
-        public ActionResult Filtro(string nombre)
+        public ActionResult Filtro(string nombreRol)
         {
             List<RolCLS> listaRol = new List<RolCLS>();
             using (var bd = new BDPasajeEntities1())
             {
-                if (nombre == null)
+                if (nombreRol == null)
                 {
                     listaRol = (from rol in bd.Rol
                                 where rol.BHABILITADO == 1
@@ -45,7 +45,7 @@ namespace ProyectoBuses.Controllers
                 else
                 {
                     listaRol = (from rol in bd.Rol
-                                where rol.BHABILITADO == 1 && rol.NOMBRE.Contains(nombre)
+                                where rol.BHABILITADO == 1 && rol.NOMBRE.Contains(nombreRol)
                                 select new RolCLS
                                 {
                                     iidRol = rol.IIDROL,
@@ -56,23 +56,81 @@ namespace ProyectoBuses.Controllers
             }
             return PartialView("_TablaRol", listaRol);
         }
-        public int Guardar(RolCLS oRolCLS,int titulo)
+        
+        
+        public string Guardar(RolCLS oRolCLS, int titulo)
         {
-            int rpta = 0;
-            using(var bd=new BDPasajeEntities1())
+
+            //Habra un error si el campo llega vacio;
+            string rpta = "";
+
+            try
             {
-                if (titulo.Equals(1))
+
+                if (!ModelState.IsValid)
                 {
-                    Rol oRol = new Rol();
-                    oRol.NOMBRE = oRolCLS.nombre;
-                    oRol.DESCRIPCION = oRolCLS.descripcion;
-                    oRol.BHABILITADO = 1;
-                    bd.Rol.Add(oRol);
-                    rpta=bd.SaveChanges();
+                    var query = (from state in ModelState.Values
+                                 from error in state.Errors
+                                 select error.ErrorMessage).ToList();
+
+                    rpta += "<ul class='list-group'>";
+
+                    foreach (var item in query)
+                    {
+                        rpta += "<li class='list-group-item'>" + item + "</li>";
+                    }
+                    rpta += "</ul>";
+
                 }
+                else
+                {
+                    using (var bd = new BDPasajeEntities1())
+                    {
+                        if (titulo.Equals(-1))
+                        {
+                            Rol oRol = new Rol();
+                            oRol.NOMBRE = oRolCLS.nombre;
+                            oRol.DESCRIPCION = oRolCLS.descripcion;
+                            oRol.BHABILITADO = 1;
+                            bd.Rol.Add(oRol);
+                            rpta = bd.SaveChanges().ToString();
+                            if (rpta == "0") rpta = "";
+                        }
+                        else
+                        {
+                            Rol oRol = bd.Rol.Where(p => p.IIDROL == titulo).First();
+                            oRol.NOMBRE = oRolCLS.nombre;
+                            oRol.DESCRIPCION = oRolCLS.descripcion;
+
+                            bd.SaveChanges();
+                            rpta = bd.SaveChanges().ToString();
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {             
+                rpta = "";
+                Console.WriteLine(ex.ToString());
             }
             return rpta;
         }
+
+        //Ojo aqui con la variable titulo;
+        public JsonResult recuperarDatos(int titulo)
+        {
+            RolCLS ORolcls = new RolCLS();
+
+            using (var bd = new BDPasajeEntities1())
+            {
+                Rol oRol = bd.Rol.Where(p => p.IIDROL == titulo).First();
+
+                ORolcls.nombre = oRol.NOMBRE;
+                ORolcls.descripcion = oRol.DESCRIPCION;
+
+
+            }
+            return Json(ORolcls, JsonRequestBehavior.AllowGet);
+        }
     }
-    
 }

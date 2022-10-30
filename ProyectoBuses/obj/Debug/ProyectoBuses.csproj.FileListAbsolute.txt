@@ -123,6 +123,7 @@ C:\Users\VICTOR\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBus
 C:\Users\VICTOR\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.csproj.CopyComplete
 C:\Users\VICTOR\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.dll
 C:\Users\VICTOR\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.pdb
+C:\Users\VICTOR\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.csproj.AssemblyReference.cache
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\bin\ProyectoBuses.dll.config
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\bin\ProyectoBuses.dll
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\bin\ProyectoBuses.pdb
@@ -181,9 +182,8 @@ C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\bin\es\System.Web.Razor.r
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\bin\es\System.Web.WebPages.resources.dll
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\bin\es\System.Web.WebPages.Razor.resources.dll
-C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.csproj.AssemblyReference.cache
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.csproj.CoreCompileInputs.cache
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.csproj.CopyComplete
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.dll
 C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.pdb
-C:\Users\VICTOR\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.csproj.AssemblyReference.cache
+C:\Users\PC\source\repos\ProyectoBusesVF\ProyectoBuses\obj\Debug\ProyectoBuses.csproj.AssemblyReference.cache

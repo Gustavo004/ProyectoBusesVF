@@ -15,7 +15,7 @@
 }, new { @id = "frmFiltro" }))
 {
     @Html.Label("Ingrese nombre rol");
-    @Html.TextBox("nombre", null, new { @class = "form-control" })
+    @Html.TextBox("nombreRol", null, new { @class = "form-control", @name = "nombreRolTest" })
 }
 <br />
 <div id="divRol">
@@ -32,15 +32,13 @@
             @using (Ajax.BeginForm("Guardar", "Rol", null, new AjaxOptions
             {
                 HttpMethod = "Post",
-                OnSuccess = "Guardar"
+                OnSuccess = "Guardar",
+                UpdateTargetId = "error"
             }))
             {
                 @Html.Hidden("Titulo")
                 <div class="modal-body">
-                    <div>
-                        @Html.Label("Id Rol")
-                        @Html.TextBox("iidRol", null, new { @class = "form-control", @readOnly = true })
-                    </div>
+                    <!--ESTOS SON LOS CAMPOS DEL MODAL-->
                     <div>
                         @Html.Label("Nombre Rol")
                         @Html.TextBox("nombre", null, new { @class = "form-control" })
@@ -48,33 +46,79 @@
                     <div>
                         @Html.Label("Descripcion Rol")
                         @Html.TextBox("descripcion", null, new { @class = "form-control" })
+
                     </div>
                 </div>
-            <div class="modal-footer">
-                <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
             }
+
+            <div id="error">
+
+            </div>
+
+
+
         </div>
     </div>
 </div>
 
 <script>
-    let nombre = document.getElementById("nombre");
+    let nombre = document.getElementById("nombreRol");
     nombre.addEventListener("keyup", () => {
         $("#frmFiltro").trigger("submit");
     })
     function Agregar() {
-        document.getElementById("Titulo").value = 1;
+        //este Titulo no le cambies ya lo encontre asi ;
+        document.getElementById("Titulo").value = -1;
+
+        document.getElementById("error").innerHTML = "";
+
+
+        Limpiar();
 
     }
     function Guardar(resultado) {
-        if (resultado == 1) {
+        if (resultado == "1" || resultado == "0") {
             $("#frmFiltro").trigger("submit");
             document.getElementById("btnClose").click();
             alert("Se guardo correctamente")
         } else {
             alert("Ocurrio un error")
         }
+    }
+
+    function Limpiar() {
+        document.getElementsByName("nombreRolTest").value = "";
+        document.getElementById("descripcion").value = "";
+        document.getElementById("error").innerHTML = "";
+    }
+
+
+
+
+
+
+
+
+    function Editar(id) {
+        document.getElementById("Titulo").value = id;
+        document.getElementById("error").innerHTML = "";
+        alert(id)
+
+        Limpiar();
+
+
+        $.get("Rol/recuperarDatos/?titulo=" + id, function (data) {
+            console.log(data);
+            document.getElementsByName("nombreRolTest").value = data.nombre
+
+
+            //NO TOCAR DESCRIPCION
+            document.getElementById("descripcion").value = data.descripcion
+        })
+
     }
 </script>
