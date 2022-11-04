@@ -24,13 +24,13 @@ namespace ProyectoBuses.Controllers
                                    accion = pagina.ACCION
                                }).ToList();
             }
-                return View(listaPagina);
+            return View(listaPagina);
         }
-        public ActionResult Filtrar(Pagina oPaginaCLS)
+        public ActionResult Filtrar(PaginaCLS oPaginaCLS)
         {
-            string mensaje = oPaginaCLS.MENSAJE;
+            string mensaje = oPaginaCLS.mensajeFiltro;
             List<PaginaCLS> listaPagina = new List<PaginaCLS>();
-            using (var bd=new BDPasajeEntities1())
+            using (var bd = new BDPasajeEntities1())
             {
                 if (mensaje == null)
                 {
@@ -57,27 +57,82 @@ namespace ProyectoBuses.Controllers
                                    }).ToList();
                 }
             }
-            return PartialView("_TablaPagina",listaPagina);
+            return PartialView("_TablaPagina", listaPagina);
         }
-        public int Guardar(Pagina oPaginaCLS,int titulo)
-        {
-            int rpta = 0;
-            using(var bd=new BDPasajeEntities1())
+        public string Guardar(PaginaCLS oPaginaCLS, int titulo)
+      {  
+            string rpta = "";
+
+            try
             {
-                if (titulo == 1)
+                if (!ModelState.IsValid)
                 {
-                    Pagina oPagina = new Pagina();
-                    oPagina.MENSAJE = oPaginaCLS.MENSAJE;
-                    oPagina.ACCION = oPaginaCLS.ACCION;
-                    oPagina.CONTROLADOR = oPaginaCLS.CONTROLADOR;
-                    oPagina.BHABILITADO = 1;
-                    bd.Pagina.Add(oPagina);
-                    rpta=bd.SaveChanges();
+                    var query = (from state in ModelState.Values
+                                 from error in state.Errors
+                                 select error.ErrorMessage).ToList();
+
+                    rpta += "<ul class='list-group'>";
+
+                    foreach (var item in query)
+                    {
+                        rpta += "<li class='list-group-item'>" + item + "</li>";
+                    }
+                    rpta += "</ul>";
 
                 }
+                else
+                {
+
+                    using (var bd = new BDPasajeEntities1())
+                    {
+
+                        //AGREGAR
+                        if (titulo == -1)
+                        {
+                            Pagina oPagina = new Pagina();
+                            oPagina.MENSAJE = oPaginaCLS.mensaje;
+                            oPagina.ACCION = oPaginaCLS.accion;
+                            oPagina.CONTROLADOR = oPaginaCLS.controlador;
+                            oPagina.BHABILITADO = 1;
+                            bd.Pagina.Add(oPagina);
+                            rpta = bd.SaveChanges().ToString();
+                            if (rpta == "0") rpta = "";
+                        }
+                        else
+                        {
+                            //ESTO ES PARA EDITAR
+                            Pagina oPagina = bd.Pagina.Where(p => p.IIDPAGINA == titulo).First();
+                            oPagina.MENSAJE = oPaginaCLS.mensaje;
+                            oPaginaCLS.controlador = oPaginaCLS.controlador;
+                            oPaginaCLS.accion = oPaginaCLS.accion;
+                            rpta = bd.SaveChanges().ToString();
+
+                        }
+                    }
+                }
+            }//Fin del try
+            catch (Exception ex)
+            {
+                rpta = "";
+                Console.WriteLine(ex.Message);
             }
             return rpta;
+        }
 
+        public JsonResult recuperarInformacion(int idPagina) 
+        {
+
+            PaginaCLS oPaginaCLS = new PaginaCLS();
+
+            using (var bd = new BDPasajeEntities1() ) 
+            {
+                Pagina oPagina = bd.Pagina.Where(p => p.IIDPAGINA == idPagina).First();
+
+                oPaginaCLS.mensaje = oPagina.MENSAJE;
+                oPaginaCLS.accion = oPagina.ACCION;
+                oPaginaCLS.controlador = oPagina.CONTROLADOR;
+            }
+            return Json(oPaginaCLS, JsonRequestBehavior.AllowGet);
         }
     }
 }

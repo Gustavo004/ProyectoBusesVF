@@ -56,8 +56,8 @@ namespace ProyectoBuses.Controllers
             }
             return PartialView("_TablaRol", listaRol);
         }
-        
-        
+
+
         public string Guardar(RolCLS oRolCLS, int titulo)
         {
 
@@ -108,8 +108,8 @@ namespace ProyectoBuses.Controllers
                     }
                 }
             }
-            catch(Exception ex)
-            {             
+            catch (Exception ex)
+            {
                 rpta = "";
                 Console.WriteLine(ex.ToString());
             }
@@ -132,5 +132,43 @@ namespace ProyectoBuses.Controllers
             }
             return Json(ORolcls, JsonRequestBehavior.AllowGet);
         }
+
+
+        public string eliminarRol(RolCLS oRolCLS)
+        {
+               
+            string rpta = ""; //Si esta vacio es porque hubo un error;
+            try
+            {
+                int idrol = oRolCLS.iidRol;
+                using (var bd = new BDPasajeEntities1() )
+                {
+                    
+                    Rol oRol = bd.Rol.Where(p => p.IIDROL == idrol).First();
+                    oRol.BHABILITADO = 0;
+
+                    rpta = bd.SaveChanges().ToString();
+                    //Aqui devuevlve 1 como cadena y eso esta bien 
+                }
+            }
+            catch (Exception ex)
+            {
+                rpta = "";
+                Console.WriteLine(ex.Message);
+            }
+            return rpta;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

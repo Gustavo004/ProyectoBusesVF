@@ -242,6 +242,7 @@ namespace ProyectoBuses.Controllers
             catch(Exception ex)
             {
                 rpta = 0;
+                Console.WriteLine(ex.Message);
             }
             return rpta;
         }

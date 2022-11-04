@@ -60,10 +60,29 @@
             </div>
 
 
-
         </div>
     </div>
 </div>
+
+@*-PARA ELIMINAR POPUP
+    Modal*@
+<div class="modal fade" id="exampleModalConfirmacion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea guardar los cambios?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:1em">
+                <button type="button" id="btnCerrarConfirmacion" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="EliminarRegistro()" class="btn btn-success">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     let nombre = document.getElementById("nombreRol");
@@ -98,11 +117,6 @@
 
 
 
-
-
-
-
-
     function Editar(id) {
         document.getElementById("Titulo").value = id;
         document.getElementById("error").innerHTML = "";
@@ -111,14 +125,37 @@
         Limpiar();
 
 
-        $.get("Rol/recuperarDatos/?titulo=" + id, function (data) {
+        $.get("Rol/recuperarDatos/?Titulo=" + id, function (data) {
             console.log(data);
-            document.getElementsByName("nombreRolTest").value = data.nombre
-
+            document.getElementById("nombre").value = data.nombre
 
             //NO TOCAR DESCRIPCION
             document.getElementById("descripcion").value = data.descripcion
         })
 
     }
+
+    function Eliminar(idrol) {
+        document.getElementById("Titulo").value = idrol;
+    }
+
+    function EliminarRegistro() {
+        
+        var idrol = document.getElementById("Titulo").value;
+        alert(idrol)
+        $.get("Rol/eliminarRol/?oRolCLS=" + iidrol, function (data) {
+            console.log(data)
+
+            if (data == "1")
+            {
+                alert("Se ejecuto correctamente");
+                $("#frmFiltro").trigger("submit");
+                document.getElementById("btnCerrarConfirmacion").click();
+            }
+        })
+    }
+
+
+
+
 </script>

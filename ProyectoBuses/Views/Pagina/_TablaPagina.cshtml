@@ -8,6 +8,7 @@
             <td>@Html.LabelFor(p => Model[0].mensaje)</td>
             <td>@Html.LabelFor(p => Model[0].accion)</td>
             <td>@Html.LabelFor(p => Model[0].controlador)</td>
+            <td><b>Operaciones</b></td>
         </tr>
 
     </thead>
@@ -20,7 +21,11 @@
                 <td>@item.mensaje</td>
                 <td>@item.accion</td>
                 <td>@item.controlador</td>
-
+                <td>
+                    <button type="button" onclick="Editar(@item.iidpagina)" class="btn btn-primary  glyphicon glyphicon-edit" data-toggle="modal" data-target="#myModal">
+                        
+                    </button>
+                </td>
             </tr>
         }
 

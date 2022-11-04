@@ -18,8 +18,9 @@
     HttpMethod = "POST",
     UpdateTargetId = "divRolPagina",
     InsertionMode = InsertionMode.Replace
-}, new {@id="frmFiltrado" })){
-    @Html.DropDownList("iidrol", listaRol,new { @class="form-control"})
+}, new { @id = "frmFiltrado" }))
+{
+    @Html.DropDownList("iidrolFiltro", listaRol, new { @class = "form-control" })
 }
 <div id="divRolPagina">
     @Html.Partial("_TableRolPagina", Model);
@@ -35,28 +36,33 @@
             </div>
             @using (Ajax.BeginForm("Guardar", "RolPagina", null, new AjaxOptions
             {
-                HttpMethod = "Post",
-                OnSuccess = "Guardar"
+                HttpMethod = "POST",
+                OnSuccess = "Guardar",
+                UpdateTargetId = "divRolPaginaError",
+                InsertionMode = InsertionMode.Replace
             }))
             {
                 @Html.Hidden("titulo")
                 <div class="modal-body">
-                    <div>
-                        @Html.Label("Id Rol Pagina")
-                        @Html.TextBox("iidrolpagina", null, new { @class = "form-control", @readOnly = true })
-                    </div>
+
                     <div>
                         @Html.Label("Nombre Rol")
                         @Html.DropDownList("iidrol", listaRol, new { @class = "form-control" })
                     </div>
+
                     <div>
                         @Html.Label("Nombre Pagina")
                         @Html.DropDownList("iidpagina", listaPagina, new { @class = "form-control" })
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+
+                <div id="divRolPaginaError">
+
                 </div>
             }
         </div>
@@ -68,17 +74,43 @@
     iidrol.addEventListener("change", () => {
         $("#frmFiltrado").trigger("submit");
     })
-    // añade el valor de 1 que significa agregar
-    function Agregar() {
-        document.getElementById("titulo").value = 1;
+
+    function Limpiar() {
+        var controles = document.getElementsByClassName("form-control");
+        var control;
+
+        for (var i = 0; i < controles.length; i++) {
+            control = controles[i];
+            control.value = "";
+        }
     }
+
+
+
+    // añade el valor de -1 que significa agregar
+    function Agregar() {
+        Limpiar();
+        document.getElementById("titulo").value = -1;
+    }
+
     function Guardar(rpta) {
-        if (rpta == 1) {
+        //Agregar;
+        if (rpta == "-1" || rpta == "0") {
             $("#frmFiltrado").trigger("submit");
             document.getElementById("btnClose").click();
             alert("Se ejecuto correctamente")
         } else {
             alert("Ocurrio un error");
         }
+    }
+
+    function Editar(idrolPagina) {
+        document.getElementById("titulo").value = idrolPagina;
+        $.get("RolPagina/recuperarInformacion/?idRolPagina=" + idrolPagina, function (data) {
+
+            document.getElementById("iidrol").value = data.iidrol;
+            document.getElementById("iidpagina").value = data.iidpagina;
+        })
+        Limpiar();
     }
 </script>

@@ -18,11 +18,11 @@
 }, new { @id = "frmFiltrar" }))
 {
     @Html.Label("Ingrese mensaje");
-    @Html.TextBox("mensaje", null, new { @class = "form-control" });
+    @Html.TextBox("mensajeFiltro", null, new { @class = "form-control" });
 }
 <br />
 <div id="divPagina">
-    @Html.Partial("_TablaPagina",Model)
+    @Html.Partial("_TablaPagina", Model)
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -34,48 +34,57 @@
             </div>
             @using (Ajax.BeginForm("Guardar", "Pagina", null, new AjaxOptions
             {
-                HttpMethod = "Post",
-                OnSuccess = "Guardar"
+                HttpMethod = "POST",
+                OnSuccess = "Guardar",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "divError"
             }))
             {
                 @Html.Hidden("Titulo")
                 <div class="modal-body">
-                    <div>
-                        @Html.Label("Id Pagina")
-                        @Html.TextBox("iidpagina", null, new { @class = "form-control", @readOnly = true })
-                    </div>
+
                     <div>
                         @Html.Label("Mensaje Link")
                         @Html.TextBox("mensaje", null, new { @class = "form-control" })
                     </div>
+
                     <div>
+
                         @Html.Label("Acción")
                         @Html.TextBox("accion", null, new { @class = "form-control" })
                     </div>
+
                     <div>
                         @Html.Label("Controlador")
                         @Html.TextBox("controlador", null, new { @class = "form-control" })
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
+
+                <div id="divError">
+
+                </div>
+
             }
         </div>
     </div>
 </div>
 <script>
     let mensaje = document.getElementById("mensaje");
-    
+
     mensaje.addEventListener("keyup", (e) => {
         $("#frmFiltrar").trigger("submit");
     })
     function Agregar() {
-        document.getElementById("Titulo").value = 1;
+        document.getElementById("Titulo").value = "-1";
+        Limpiar();
     }
     function Guardar(result) {
-        if (result == 1) {
+        if (result == "1" || result == "0") {
             $("#frmFiltrar").trigger("submit");
             document.getElementById("btnClose").click();
             alert("Se agrego correctamente");
@@ -83,4 +92,28 @@
             alert("Ocurrio un errorr")
         }
     }
+
+    function Editar(idPagina) {
+        document.getElementById("Titulo").value = idPagina;
+        Limpiar();
+        $.get("Pagina/recuperarInformacion/?idPagina=" + idPagina, function(data) {
+
+            document.getElementById("mensajeFiltro").value = data.mensajeFiltro;
+            document.getElementById("accion").value = data.accion
+            document.getElementById("controlador").value = data.controlador;
+        })
+
+    }
+
+
+    function Limpiar() {
+        var controles = document.getElementsByClassName("form-control");
+        var control;
+
+        for (var i = 0; i < controles.length; i++) {
+            control = controles[i];
+            control.value = "";
+        }
+    }
+
 </script>
