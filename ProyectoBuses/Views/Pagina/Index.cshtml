@@ -73,6 +73,28 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="exampleModalConfirmacion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea guardar los cambios?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:1em">
+                <button type="button" id="btnCerrarConfirmacion" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="EliminarRegistro()" class="btn btn-success">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <script>
     let mensaje = document.getElementById("mensaje");
 
@@ -96,7 +118,7 @@
     function Editar(idPagina) {
         document.getElementById("Titulo").value = idPagina;
         Limpiar();
-        $.get("Pagina/recuperarInformacion/?idPagina=" + idPagina, function(data) {
+        $.get("Pagina/recuperarInformacion/?idPagina=" + idPagina, function (data) {
 
             document.getElementById("mensajeFiltro").value = data.mensajeFiltro;
             document.getElementById("accion").value = data.accion
@@ -115,5 +137,30 @@
             control.value = "";
         }
     }
+
+
+    function Eliminar(iidrolpagina) {
+        document.getElementById("Titulo").value = iidrolpagina;
+    }
+
+    function EliminarRegistro() {
+        var iidrolpagina = document.getElementById("Titulo").value;
+        $.get("Pagina/EliminarPagina/?iidpagina=" + iidrolpagina, function (data) {
+            if (data == 1) {
+                alert("Se ejecuto correctamente");
+                $("#frmFiltro").trigger("submit");
+                document.getElementById("btnCerrarConfirmacion").click();
+                window.location.reload();
+            }
+        })
+    }
+
+
+
+
+
+
+
+
 
 </script>

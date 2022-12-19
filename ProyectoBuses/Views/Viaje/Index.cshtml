@@ -3,46 +3,88 @@
 
 @{
     ViewBag.Title = "Index";
+    List<SelectListItem> listaLugar = (List<SelectListItem>)ViewBag.listaLugar;
+    List<SelectListItem> listaBus = (List<SelectListItem>)ViewBag.listaBus;
 }
-<br /><br />
+<br />
+<br />
 <h2>Index</h2>
 
-@Html.ActionLink("Agregar","Agregar","Viaje",null , new {@class = "btn btn-primary"})
+<!--Este boton invoca un modal que contiene un formulario-->
+<button type="button" onclick="Agregar()" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Agregar
+</button>
 
-<table class="table table-striped">
-
-    <thead>
-
-        <tr>
-            <td>@Html.LabelFor(p => Model[0].iidViaje)</td>
-            <td>@Html.LabelFor(p => Model[0].nombreBus)</td>
-            <td>@Html.LabelFor(p => Model[0].nombreLugarOrigen)</td>
-            <td>@Html.LabelFor(p => Model[0].nombreLugarDestino)</td>
-            <td width="10%"><b>Operaciones</b></td>
-        </tr>
-    </thead>
-
-
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>@item.iidViaje</td>
-            <td>@item.nombreBus</td>
-            <td>@item.nombreLugarOrigen</td>
-            <td>@item.nombreLugarDestino</td>
-
-            <td>
-                @Html.ActionLink(" ", "Editar", "Viajes", new { id = item.iidViaje }, new { @class = "glyphicon glyphicon-edit    btn btn-primary" })
-                @Html.ActionLink(" ", "Eliminar", "Viajes", new { id = item.iidViaje }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
-            </td>
+<!--Esto lo usamos para llamar a la vista parcial que contiene todo el listado de viajes-->
+@Html.Partial("_TablaViaje",Model)
 
 
 
-        </tr>
-        }
-    </tbody>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            @using (Ajax.BeginForm("Guardar", "Viaje", null, new AjaxOptions
+            {
+                HttpMethod = "Post",
+                OnSuccess = "Guardar",
+                UpdateTargetId = "error"
+            }))
+            {
+                @Html.Hidden("Titulo")
+                <div class="modal-body">
+                    <!--ESTOS SON LOS CAMPOS DEL MODAL-->
 
+                    <div>
+                        @Html.Label("Lugar de origen ")
+                        @Html.DropDownList("iidLugarOrigen", listaLugar, new { @class = "form-control" })
+                    </div>
 
+                    <div>
+                        @Html.Label("Lugar de Destino ")
+                        @Html.DropDownList("iidLugarDestino", listaLugar, new { @class = "form-control" })
+                    </div>
 
-</table>
+                    <div>
+                        @Html.Label("Precio en S/")
+                        @Html.Editor("precio", null, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                    </div>
+
+                    <div>
+                        @Html.Label("Buses")
+                        @Html.DropDownList("iidBus", listaBus, new { @class = "form-control" })
+                    </div>
+
+                    <div>
+                        @Html.Label("# de Asientos")
+                        @Html.Editor("numeroAsientosDisponibles", null, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                    </div>
+
+                    <div>
+                        @Html.Label("Foto")
+                        <img width="150" height="150" id="imgFoto" style="display:block" />
+                        @Html.TextBox("foto", "", new { type = "file", id = "fupFoto" })
+                    </div>
+
+                    <div>
+                        @Html.Hidden("nombreFoto")
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            }
+
+            <div id="error">
+            </div>
+
+        </div>
+
+    </div>
+</div>

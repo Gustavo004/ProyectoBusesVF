@@ -60,7 +60,8 @@ namespace ProyectoBuses.Models
         [Display(Name = "Nombre Bus")]
         public string nombreBus { get; set; }
 
-
+        //Propiedades Adicionales 
+        public string nombreFoto { get; set; }
 
 
 

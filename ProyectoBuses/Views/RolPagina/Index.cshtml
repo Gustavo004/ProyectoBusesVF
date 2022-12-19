@@ -69,6 +69,28 @@
     </div>
 </div>
 
+
+@* -PARA ELIMINAR POPUP
+    Modal *@
+<div class="modal fade" id="exampleModalConfirmacion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea guardar los cambios?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="padding:1em">
+                <button type="button" id="btnCerrarConfirmacion" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="EliminarRegistro()" class="btn btn-success">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     let iidrol = document.getElementById("iidrol");
     iidrol.addEventListener("change", () => {
@@ -84,7 +106,6 @@
             control.value = "";
         }
     }
-
 
 
     // añade el valor de -1 que significa agregar
@@ -113,4 +134,29 @@
         })
         Limpiar();
     }
+
+
+    function Eliminar(idrolPagina) {
+        document.getElementById("titulo").value = idrolPagina;
+    }
+
+    function EliminarRegistro() {
+        var idrolPagina = document.getElementById("titulo").value;
+        console.log(idrolPagina);
+        $.get("RolPagina/EliminarRolPagina/?idRolPagina=" + idrolPagina, function (data) {
+            if (data == 1) {
+                alert("Se ejecuto correctamente");
+                $("#frmFiltro").trigger("submit");
+                document.getElementById("btnCerrarConfirmacion").click();
+                window.location.reload();
+            } else
+            {
+                alert("Ocurrio un error");
+            }
+        })
+    }
+
+
+
+
 </script>

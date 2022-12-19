@@ -60,7 +60,7 @@ namespace ProyectoBuses.Controllers
             return PartialView("_TablaPagina", listaPagina);
         }
         public string Guardar(PaginaCLS oPaginaCLS, int titulo)
-      {  
+        {
             string rpta = "";
 
             try
@@ -119,12 +119,12 @@ namespace ProyectoBuses.Controllers
             return rpta;
         }
 
-        public JsonResult recuperarInformacion(int idPagina) 
+        public JsonResult recuperarInformacion(int idPagina)
         {
 
             PaginaCLS oPaginaCLS = new PaginaCLS();
 
-            using (var bd = new BDPasajeEntities1() ) 
+            using (var bd = new BDPasajeEntities1())
             {
                 Pagina oPagina = bd.Pagina.Where(p => p.IIDPAGINA == idPagina).First();
 
@@ -134,5 +134,43 @@ namespace ProyectoBuses.Controllers
             }
             return Json(oPaginaCLS, JsonRequestBehavior.AllowGet);
         }
+
+
+        //Para eliminar
+        public int EliminarPagina(int iidpagina)
+        {
+
+            int rpta = 0;
+
+            try
+            {
+                using (var bd = new BDPasajeEntities1())
+                {
+                    Pagina oPagina = bd.Pagina.Where(p => p.IIDPAGINA == iidpagina).First();
+                    oPagina.BHABILITADO = 0;
+                    rpta = bd.SaveChanges();
+}
+                return rpta;
+            }
+            catch (Exception ex)
+            {
+                //Aca se considera a 0 como error para nosostros 
+                Console.WriteLine(ex.Message);
+                rpta = 0;
+            }
+
+            return rpta;
+        }
+
+
+
+
+
+
+
+
+
+
+
     }
 }

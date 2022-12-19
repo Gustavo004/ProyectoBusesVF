@@ -181,6 +181,32 @@ namespace ProyectoBuses.Controllers
         }
 
 
+        //Para eliminar
+        public int EliminarRolPagina(int idRolPagina)
+        {
+
+            int rpta = 0;
+
+            try
+            {
+                using (var bd = new BDPasajeEntities1())
+                {
+                    RolPagina oRolPagina = bd.RolPagina.Where(p => p.IIDROLPAGINA == idRolPagina).First();
+                    oRolPagina.BHABILITADO = 0;
+                    rpta = bd.SaveChanges();
+                }
+                return rpta;
+            }
+            catch (Exception ex)
+            {
+                //Aca se considera a 0 como error para nosostros 
+                Console.WriteLine(ex.Message);
+                rpta = 0;
+            }
+
+            return rpta;
+        }
+
 
 
 

@@ -14,6 +14,7 @@ namespace ProyectoBuses.Controllers
         {
 
             List<ViajeCLS> listaViaje= null;
+            ListarCombo();
 
             using (var bd = new BDPasajeEntities1()) 
             {
@@ -63,7 +64,7 @@ namespace ProyectoBuses.Controllers
         }
   
 
-        //Creando una lista para lista los buses;
+        //Creando una lista para lista los buses;B
         List<SelectListItem> listaBus = null;
         public void ListarBus()
         {
