@@ -25,7 +25,7 @@ namespace ProyectoBuses.Models
         [Display(Name = "Precio")]
         [Range(0,2000,ErrorMessage ="Fuera de rango")]
         [Required]
-        public double precio { get; set; }
+        public decimal precio { get; set; }
 
 
         [Display(Name = "Fecha Viaje")]
@@ -63,6 +63,7 @@ namespace ProyectoBuses.Models
         //Propiedades Adicionales 
         public string nombreFoto { get; set; }
 
+        public string mensaje { get; set; }
 
 
 

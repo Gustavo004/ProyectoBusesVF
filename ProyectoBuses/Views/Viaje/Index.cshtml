@@ -15,8 +15,28 @@
     Agregar
 </button>
 
-<!--Esto lo usamos para llamar a la vista parcial que contiene todo el listado de viajes-->
-@Html.Partial("_TablaViaje",Model)
+@using (Ajax.BeginForm("Filtrar", "Viaje", null, new AjaxOptions
+{
+
+    HttpMethod = "POST",
+    UpdateTargetId = "divViaje",
+    InsertionMode = InsertionMode.Replace
+
+
+
+}, new { @id = "frmFiltrar" }))
+{
+    @Html.DropDownList("lugarDestinoParametro",listaLugar)
+
+    <div id="divViaje">
+        <!--Esto lo usamos para llamar a la vista parcial que contiene todo el listado de viajes-->
+        @Html.Partial("_TablaViaje", Model)
+    </div>
+
+}
+
+
+
 
 
 
@@ -88,3 +108,73 @@
 
     </div>
 </div>
+
+<script>
+
+    function Limpiar() {
+        var controles = document.getElementsByClassName("form-control");
+        var ncontroles = controles.length;
+        for (var i = 0; i < ncontroles; i++) {
+            controles[i].value = "";
+        }
+        document.getElementById("imgFoto").src = "";
+        document.getElementById("error").innerHTML = "";
+    }
+
+    function Agregar() {
+        Limpiar();
+        //Se le asigna un valor al momento de llamar al boton de agregar;
+        document.getElementById("Titulo").value = -1;
+    }
+
+    function Editar(iidViaje) {
+        Limpiar();
+        document.getElementById("Titulo").value = iidViaje
+
+        //Pendiente
+        $.get("Viaje/recuperarInformacion/?iidViaje=" + iidViaje, function (data) {
+
+
+        })
+
+    }
+
+    function Guardar(rpta) {
+        if (rpta == "1") {
+            alert("Se ejecuto correctamente");
+            document.getElementById("btnClose").click();
+        }
+
+    }
+
+    //Aqui recupera el img que es como un pictureBox que sirve para mostrar la foto;
+    var imgFoto = document.getElementById("imgFoto");
+
+    //Aqui recupera el nombre del img en cuestión y le pasa a un textBox oculto.
+    var fupFoto = document.getElementById("fupFoto");
+
+    //Cada vez que seleccione la imagen
+    fupFoto.onchange = function () {
+
+        //Para obtener SOLO la primera imagen seleccionada.
+        var files = fupFoto.files[0];
+
+        //Creamos un objeto reader para poder leer la imagen
+        var reader = new FileReader();
+        reader.onloadend = function () {
+
+            //Ver el resultado de lo leido o sea la foto.
+            imgFoto.src = reader.result;
+
+            //Para pasarle el nombre;
+            document.getElementById("nombreFoto").value = files.name;
+        }
+
+        //Leemos la imagen
+        //Luego de leer este archivo
+        reader.readAsDataURL(files)
+    }
+
+
+
+</script>
